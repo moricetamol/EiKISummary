@@ -1,0 +1,118 @@
+\documentclass[
+../../EiKI_Summary.tex,
+]
+{subfiles}
+    
+\externaldocument[ext:]{../../EiKI_Summary.tex}
+% Set Graphics Path, so pictures load correctly
+\graphicspath{{../../}}
+
+\begin{document}
+\section{What is AI?}
+In general, there is no set definition of what artificial intelligence is. 
+The most common definition is:
+
+\begin{center}
+    \begin{smalldefbox*}
+        A system of machines that can perform tasks that normally require human intelligence.
+    \end{smalldefbox*}
+\end{center}
+This is flawed in that intelligence itself also does not have a set definition, and neither does human intelligence.
+
+\subsection{What is Intelligence?}
+\subsubsection{Touring Test}
+Intelligence is often defined by the Touring Test.
+Hereby it is assumed that an entity is intelligent if it cannot be distinguished from another intelligent entity by observing its behavior.
+
+The Touring Test is set up like this:
+
+\begin{enumerate}
+    \item Human interrogator interacts with two entities, A and B. Hereby one of the two is already assumed to be intelligent (another human).
+    \item If the interrogator cannot distinguish which entity is the assumed intelligent entity, it is assumed that the other entity is intelligent as well.
+\end{enumerate}
+
+This test is also flawed as it does not distinguish between different intelligence levels (knowledge, reasoning, language understanding, learning etc.). It also is very subjective to the interrogator. It is not based on an objective metric and therefore the outcome can differ from person to person.
+
+It also assumes that humans are inherently intelligent, which makes it a circular argument.
+
+\subsubsection{Chinese Room Argument}
+The Chinese Room Argument tries to answer the question whether intelligence is the same as intelligent behavior. It assumes that even if a machine behaves intelligently, that does not mean it is actually intelligent.
+
+The argument goes as follows:
+\begin{enumerate}
+    \item A person who doesn't know chinese is put into a room. Outside the room there is a person, who can only interact with this person by slipping them notes written in chinese.
+    \item The person inside the room has detailed instructions as to how to answer the notes, without any translation or understanding. 
+    \item To the person outside of the room it looks like the person inside is able to understand and answer to these notes, therefore the person outside of the room assumes that the person inside knows chinese.
+\end{enumerate}
+
+So the person outside of the room assumes intelligence due to behavior, that does not necessitates the intelligence if the answers are already known.
+
+Is a self-driving car intelligent? Is ChatGPT intelligent?
+
+\subsubsection{Does it even matter?}
+The question of what intelligence is is a long, complex and difficult question. However, as it is a more philosophical question it doesn't actually really affect the scientific field of AI. It's a definition, not a basis.
+
+\subsection{Characteristics of AI}
+
+AIs are often divided into two categories: general AI and narrow AI. 
+
+\begin{defbox}
+    [General \& Narrow AI]
+    \begin{itemize}
+        \item General (strong) AI is defined so that it can handle any intellectual task
+        \item Narrow (weak) AI is defined so that it has a specific task or domain it works in.
+    \end{itemize}
+    This mirrors the distinction between intelligence and acting intelligent.
+    Currently, most AIs are considered narrow, general AIs are the goal in most research.
+\end{defbox}
+
+An AI should posses the following characteristics:
+
+\begin{defbox}
+    [Adaptability]
+    The ability to improve performance by learning from experience
+\end{defbox}
+
+\begin{defbox}
+    [Autonomous]
+    The ability to perform tasks without constant guidance from a user / expert
+\end{defbox}
+
+Usually an AI is modelled after one of the two following concepts:
+
+\begin{defbox}
+    [Law of Thoughts]
+    The AI should be able to reason about its own actions, arguments and thought processes.\\
+    More akin to human intelligence.
+\end{defbox}
+
+\begin{defbox}
+    [Rational Behavior]
+    The AI should be able to determine what the best action is for a given situation to maximize the achievement.\\
+    Based on a mathematical model of rationality that achieves the most desirable outcome given the information available.
+\end{defbox}
+
+Rationality has two advantages
+\begin{itemize}
+    \item \defc{More General:} For many situations a provable correct option does not exist. The most likely outcome is a better solution.
+    \item \defc{More ammenable:} Rationality can be defined, refined and optimized.
+\end{itemize}
+However, rationality rarely displays a good model of reality.
+
+Systems that think and behave like humans are often talked about in the scientific field of \defc{Cognitive Science}.
+
+\subsection{Foundations of AI}
+
+The field of AI is made up by many other fields:
+\begin{itemize}
+    \item \defc{Philosophy:} Logic, reasoning, mind as a physical system, foundations of learning, language, rationality
+    \item \defc{Mathematics:} Formal representation and proof algorithms, computation, decidability, tracability, probability
+    \item \defc{Psychology:} Adaptation, phenomena of perception and motor control
+    \item \defc{Economics:} Formal theory of rational decisions, game theory
+    \item \defc{Linguistics:} Knowledge representation, grammar
+    \item \defc{Neuroscience:} Physical substrate for mental processes
+    \item \defc{Control theory:} homeostatic systems, stability, optimal agent design
+\end{itemize}
+
+
+\end{document}
