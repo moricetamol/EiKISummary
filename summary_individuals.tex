@@ -1,0 +1,23 @@
+\def\MainColor{codepurple} % Sets the main color of the template
+\def\MathColor{codegreen} % Sets color of mathbox environment
+\def\CodeColor{codeorange} % Sets color of code environment
+
+\newcommand{\HorRule}{\color{Black} \rule{\linewidth}{2pt}}
+\newcommand{\TitleRule}{\color{\MainColor} \rule{\linewidth}{15pt} \vspace{-90pt}\linebreak \HorRule \linebreak}
+\newcommand{\SectionHorRule}{\color{Black} \rule{\linewidth}{1pt}}
+
+\pretitle{\vspace{-80pt} \fontsize{30}{50} \usefont{OT1}{phv}{b}{n} \TitleRule \color{Black}} % Horizontal rule before the title
+
+	\title{EiKI Summary} % The title
+
+	\posttitle{\vskip 0.5em} % Whitespace under the title
+
+\preauthor{\begin{flushleft}\large \lineskip 0.5em \fontsize{15}{0} \usefont{T1}{phv}{b}{n} \color{Black}} % Author font configuration
+
+	\author{Moritz Gerhardt } % Name
+
+	\postauthor{% Anything you might want to add
+        \\ \href{https://github.com/moricetamol}{\vcentered{\includegraphics[height=15pt]{Github_logo.png}} \large \texttt{moricetamol}}
+		\par\end{flushleft}} % Horizontal rule after the title
+
+\date{} % Add date or leave empty to not show any date !!!\today

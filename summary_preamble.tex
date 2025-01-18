@@ -75,8 +75,6 @@
 
 \SetAlgoNlRelativeSize{-1}
 
-
-
 \usepackage{algpseudocode}
 \usepackage{algorithmicx}
 \newcommand\mycommfont[1]{\small\ttfamily\textcolor{codegreen}{#1}}
@@ -152,28 +150,8 @@
 %----------------------------------------------
 % Title
 %----------------------------------------------
-\def\MainColor{codepurple} % Sets the main color of the template
 \usepackage{titling}
-\newcommand{\HorRule}{\color{Black} \rule{\linewidth}{2pt}}
-\newcommand{\TitleRule}{\color{\MainColor} \rule{\linewidth}{15pt} \vspace{-90pt}\linebreak \HorRule \linebreak}
-\newcommand{\SectionHorRule}{\color{Black} \rule{\linewidth}{1pt}}
-
-\pretitle{\vspace{-80pt} \fontsize{30}{50} \usefont{OT1}{phv}{b}{n} \TitleRule \color{Black}} % Horizontal rule before the title
-
-	\title{EiKI Summary} % The title
-
-	\posttitle{\vskip 0.5em} % Whitespace under the title
-
-\preauthor{\begin{flushleft}\large \lineskip 0.5em \fontsize{15}{0} \usefont{T1}{phv}{b}{n} \color{Black}} % Author font configuration
-
-	\author{Moritz Gerhardt } % Name
-
-	\postauthor{% Anything you might want to add
-        \\ \href{https://github.com/moricetamol}{\vcentered{\includegraphics[height=15pt]{Github_logo.png}} \large \texttt{moricetamol}}
-		\par\end{flushleft}} % Horizontal rule after the title
-
-\date{} % Add date or leave empty to not show any date !!!\today
-
+\input{summary_individuals.tex}
 %-----------------------------
 % Section Style
 %-----------------------------
@@ -194,7 +172,7 @@
 {\thesubsection} % Label
 {1em} % Seperator
 {\SubSectionFont} % Before-Code
-[{\color{\MainColor}\titlerule[1pt]}] % After-Code
+[{\color{\MainColor}\titlerule[1pt]\color{White}\titlerule[0.5pt]\color{\MainColor}\titlerule[1pt]}] % After-Code
 
 \newcommand{\SubSubSectionFont}{\bfseries}
 \titleformat{\subsubsection} % Type of heading to format
@@ -203,7 +181,7 @@
 {\thesubsubsection} % Label
 {1em} % Seperator
 {\SubSubSectionFont} % Before-Code
-[{\color{\MainColor!50}\titlerule[1pt]}] % After-Code
+[{\color{\MainColor}\titlerule[1pt]}] % After-Code
 
 \renewcommand{\thesection}{\arabic{section}}
 \renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
@@ -228,38 +206,17 @@
         before=\space,
         after=\space
     },
-    greenbox/.style={
-        colback=codegreen!5!white,
-        colframe=codegreen!80!white
-    },
-    magentabox/.style={
-        colback=magenta!5!white,
-        colframe=magenta!85!black
-    },
-    orangebox/.style={
-        colback=codeorange!5!white,
-        colframe=codeorange!85!black
-    },
-    bluebox/.style={
-        colback=codeblue!5!white,
-        colframe=codeblue!95!black
-    },
-    redbox/.style={
-        colback=codered!5!white,
-        colframe=codered!85!black
-    },
-    purplebox/.style={
-        colback=codepurple!5!white,
-        colframe=codepurple!85!black
-    },
     definitionbox/.style={
-        purplebox % Change these to the colors you want your defboxes to be
+        colback=\MainColor!5!white,
+        colframe=\MainColor!85!black
     },
     mathematicsbox/.style={
-        greenbox % Change these to the colors you want your mathboxes to be
+        colback=\MathColor!5!white,
+        colframe=\MathColor!85!black
     },
     codingbox/.style={
-        orangebox % Change these to the colors you want your code boxes to be
+        colback=\CodeColor!5!white,
+        colframe=\CodeColor!85!black
     }
 }
 
