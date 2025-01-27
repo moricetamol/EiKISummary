@@ -19,7 +19,7 @@
     Often visualized as a \defc{state-space graph} that displays all reachable states and its transitions.
 
     \begin{center}
-        \includegraphics[width=0.6\textwidth]{Pics/3/StateSpaceGraph.png}
+        \includegraphics[width=0.6\textwidth]{Pics/03/StateSpaceGraph.png}
         \captionof{figure}{State-Space Graph of a robot vacuum cleaning}
     \end{center}
 \end{defbox}
@@ -92,13 +92,13 @@ Hereby we treat the state-space graph as a tree, starting with the initial state
 \begin{minipage}
     [t]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{Pics/3/ExampleTreeSearchGraph.png}
+    \includegraphics[width=\textwidth]{Pics/03/ExampleTreeSearchGraph.png}
 \end{minipage}
 \hfill
 \begin{minipage}
     [t]{0.55\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{Pics/3/ExampleTreeSearchTree.png}
+    \includegraphics[width=\textwidth]{Pics/03/ExampleTreeSearchTree.png}
 \end{minipage}
 
 Each Node in the search tree is an entire path in the state-space graph. We construct both on demand - only as much as we need (won't get all solutions)
@@ -157,13 +157,13 @@ It's also not optimal; More costly solutions may be found before less costly one
 \begin{minipage}
     [t]{0.45\textwidth}
     \centering
-    \includegraphics[width=0.9\textwidth]{Pics/3/BFSTraversal.png}
+    \includegraphics[width=0.9\textwidth]{Pics/03/BFSTraversal.png}
 \end{minipage}
 \hfill
 \begin{minipage}
     [t]{0.45\textwidth}
     \centering
-    \includegraphics[width=0.9\textwidth]{Pics/3/DFSTraversal.png}
+    \includegraphics[width=0.9\textwidth]{Pics/03/DFSTraversal.png}
 \end{minipage}
 
 \begin{table}[h!]
@@ -364,7 +364,7 @@ One example of a heuristic is the straight-line distance to the goal.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.6\textwidth]{Pics/3/GreedyBestFirstExample.png}
+    \includegraphics[width=0.6\textwidth]{Pics/03/GreedyBestFirstExample.png}
     \caption{Example of GBFS with a straight-line distance heuristic.}
 \end{figure}
 
@@ -388,7 +388,7 @@ A* Search tries to avoid paths that are already expensive. It evaluates the comp
 
 \begin{figure}[htp]
     \centering
-    \includegraphics[width=0.6\textwidth]{Pics/3/AStarSearchExample.png}
+    \includegraphics[width=0.6\textwidth]{Pics/03/AStarSearchExample.png}
     \caption{Example of A* Search with heuristic function.}
 \end{figure}
 
