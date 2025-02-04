@@ -2,7 +2,7 @@
 \usepackage{subfiles} % To split big projects into smaller files for faster compilation
 \usepackage{lmodern}
 \usepackage{multicol} % To make multiple columns on one page
-\usepackage{tcolorbox}
+\usepackage[most]{tcolorbox}
 \usepackage{graphicx}
 \usepackage[margin=2cm]{geometry}
 \usepackage[table,xcdraw,dvipsnames,svgnames]{xcolor} % More colours
@@ -12,6 +12,8 @@
 \usepackage{float}
 \usepackage{enumitem}
 \usepackage{tabularx}
+\usepackage{array}
+\usepackage{pgfplots}
 \usepackage[export]{adjustbox}
 
 \usepackage[protrusion=true,expansion=true]{microtype}
@@ -261,6 +263,11 @@
 \newtcolorbox[]{smallmathbox*}[1][]{
     mathematicsbox,
     hbox
+}
+\newtcolorbox[]{csmb*}[1][]{
+    mathematicsbox,
+    hbox,
+    center   
 }
 \newtcbox{\inlmathbox}[1][]{
     mathematicsbox,
