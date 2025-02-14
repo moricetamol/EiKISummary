@@ -1,0 +1,231 @@
+\documentclass[
+../../EiKI_Summary.tex,
+]
+{subfiles}
+    
+\externaldocument[ext:]{../../EiKI_Summary.tex}
+% Set Graphics Path, so pictures load correctly
+\graphicspath{{../../}}
+
+\begin{document}
+\section{Logic \& AI: First-Order Logic}
+As established before, Propositional Logic does not have any notion of relations or objects. This does of course limit the possible applications of Propositional Logic.
+
+\defc{First-Order Logic (FOL)} extends on propositional logic to allow for relations and objects.
+
+Some commonly used terms in FOL and scientific papers:
+
+\begin{minipage}
+    [t]{0.5\textwidth}
+    \begin{defbox}
+        [Axioms]
+        Basic facts about the domain, the ''initial'' knowledge base.
+    \end{defbox}
+\end{minipage}
+\begin{minipage}
+    [t]{0.5\textwidth}
+    \begin{defbox}
+        [Theorems]
+        Statements that are logically derived from axioms.
+    \end{defbox}
+\end{minipage}
+
+\subsection{Elements in FOL}
+\begin{itemize}
+    \item \defc{Objects:}
+    \begin{itemize}
+        \item Represent entities in the real world - Can be named accordingly: Person1, John, Earth\dots
+    \end{itemize}
+    \item \defc{Relations:}
+    \begin{itemize}
+        \item Represent relations between objects - Can be named accordingly: Has($\cdot$, $\cdot$), Is[Something]($\cdot$)\dots
+        \item Relations with only one object are called \defc{Unary Relations or Properties:} Has[Something]($\cdot$), Is[Something]($\cdot$)\dots
+    \end{itemize}
+    \item \defc{Functions:}
+    \begin{itemize}
+        \item Functions refer to objects without a name
+        \item E.g. Roommate($\cdot$) $\rightarrow$ Roommate(Person1) = Person2
+        \item Can be used to encode integers and data structures:
+        \begin{itemize}
+            \item 0, succ(0) = 1, succ(1) = 2, succ(2) = 3\dots
+            \item tree(value1, tree(value2,\dots), tree(value3,\dots))
+        \end{itemize}
+        \item Not specific to specific object: Roommate(Umbrella) is valid, but might be nonsensical
+    \end{itemize}
+\end{itemize}
+
+\subsection{Quantifiers}
+Quantifiers can be used to refer to multiple objects at once.
+
+\begin{minipage}
+    [t]{0.5\textwidth}
+    \begin{defbox}
+        [Universal: For All $\forall$]
+        Asserts that a statement is true for all objects.\\
+        $\forall x: \text{Lion(x)} \Rightarrow \text{Cat(x)}$: All lions are cats
+    \end{defbox}
+\end{minipage}
+\begin{minipage}
+    [t]{0.5\textwidth}
+    \begin{defbox}
+        [Existential: Exists $\exists$]
+        Asserts that a statement is true for at least one object.\\
+        $\exists x: \text{Cat(x)} \Rightarrow \neg(\text{Lion(x)})$: At least one cat is not a lion
+    \end{defbox}
+\end{minipage}
+
+$\forall x: A$ is equivalent to $\neg(\exists x: \neg(A))$.
+
+\newpage
+\subsection{Substitution}
+\begin{defbox}
+    [Substitution: SUBST($\cdot$)]
+    The SUBST method replaces one or more variables with something else in a sentence.
+\end{defbox}
+
+\textbf{Example:}\\
+
+\begin{center}
+	SUBST(\{x / John\}, IsHealthy(x) $\Rightarrow$ $\neg$(HasACold(x)))\\
+    becomes\\
+    IsHealthy(John) $\Rightarrow$ $\neg$(HasACold(John))
+\end{center}
+
+\subsubsection{Instantiating Quantifiers with SUBST}
+\begin{minipage}
+    [t]{0.5\textwidth}
+    \begin{defbox}
+        [Universal $\forall$]
+        Assuming a statement $\forall x: A$ we can obtain a new clause for \textbf{any} concrete \defc{ground term g}:\\
+        SUBST(\{x / g\}, A)\\
+
+        \textbf{Example:}\\
+        \begin{center}
+            $\forall x: x > 0 \Rightarrow x^2 > 0$\\
+            Substituting any concrete ground term $g$, in this case $g = 3$, yields:\\
+            SUBST(\{x / 3\}, $x > 0 \Rightarrow x^2 > 0$) = $3 > 0 \Rightarrow 3^2 > 0$\\
+        \end{center}
+    \end{defbox}
+\end{minipage}
+\begin{minipage}
+    [t]{0.5\textwidth}
+    \begin{defbox}
+        [Existential $\exists$]
+        Assuming a statement $\exists x: A$ we can obtain a new clause for \textbf{only one} \defc{Skolem constant k}:\\
+        SUBST(\{x / k\}, A)\\
+
+        \textbf{Example:}\\
+        \begin{center}
+            $\exists x: x^2 = 9$\\
+            In this case we do not assign a concrete value, but assign a ''placeholder'', the \defc{Skolem constant k}, that can later be instantiated:\\
+            SUBST(\{x / k\}, $x^2 = 9$) = $k^2 = 9$
+        \end{center}
+    \end{defbox}
+\end{minipage}
+
+\subsubsection*{Skolem Constant}
+\textbf{Important:}
+\begin{itemize}
+    \item k is a constant, that does not appear elsewhere in the knowledge base
+    \item The result of SUBST(\{x / k\}, A) is a clause that \textbf{replaces} the original clause, as they are \textbf{equivalent}
+    \item 
+\end{itemize}
+
+One must act carefully when Instantiating existentials \textbf{after} universals:
+
+Assume the statement $\forall y \exists x: \text{Parent}(x, y)$: ''Every person y has a parent x''.\\
+
+\textbf{Correct Instantiation:}
+\begin{enumerate}
+    \item Choose a specific person y - Let's say y = John
+    \item The statement then becomes $\exists x: \text{Parent}(x, \text{John})$: ''John has a parent x''.
+    \item We can now substitute x with a skolem constant $k_{\text{John}}$ to get a more specific sentence: $\text{Parent}(k_{\text{John}}, \text{John})$: ''John has a parent $k_{\text{John}}$''.
+    \item Assigning a concrete value to $k_{\text{John}}$ later on does not disturb this logic.
+\end{enumerate}
+
+\textbf{Incorrect Instantiation:}
+\begin{enumerate}
+    \item Assign x a skolem constant $k$
+    \item The statement then becomes $\forall y: \text{Parent}(k, y)$: ''Every person y has a parent $k$''. This would mean that every person $y$ has \textbf{the same parent $k$}, which might not be correct. 
+\end{enumerate}
+
+\subsection{Generalized Modus Ponens}
+\subsubsection{Unification}
+Assume two sentences: $\forall x: \text{Loves}(\text{John}, x)$ ''John loves everything'' and $\forall y: (\text{Loves}{y,\text{Jane}} \Rightarrow \text{FeelsAppreciatedBy}(\text{Jane}, y))$ ''Jane feels appreciated by everything that loves her''.
+
+We can now use substitution:
+\begin{enumerate}
+    \item \{x / Jane\} \rightarrow Loves(John, Jane)
+    \item \{y / John\} \rightarrow Loves(John, Jane) $\Rightarrow$ FeelsAppreciatedBy(Jane, John)
+    \item As 1 fulfills the condition of 2, we can infer that FeelsAppreciatedBy(Jane, Jane)
+\end{enumerate}
+
+\subsection{First-Order Conjunctive Normal Form}
+\begin{enumerate}
+    \item Convert to \defc{Negation Normal Form}: Negation symbols only occur immediately before predicate symbols
+    \item If variable names are used twice within scopes of different quantifiers, rename one of them such that the name is not used elsewhere
+    \item \defc{Skolemize statements:}
+    \begin{enumerate}
+        \item Move quantifiers out, so that we got $\forall x_1,x_2\dots \exists y_1,y_2\dots : A$. Quantifiers only occur in the prefix, not inside conjuncts.
+        \item Replace existentially quantified variables with skolem constants.
+        \item Discard universal quantifiers
+    \end{enumerate}
+    \item \defc{Convert} into clause set
+\end{enumerate}
+
+\textbf{Example:}\\
+Assume the sentence: $\forall x,y: \text{eats}(x,y) \land \neg(\text{killed}(x)) \Rightarrow \text{food}(y)$ ''Anything anyone eats and is not killed is food''\\
+\begin{enumerate}
+    \item Eliminate Implications: $\forall x,y: \neg(\text{eats}(x,y) \land \neg(\text{killed}(x))) \lor \text{food}(y)$
+    \item Move negations inwards (De Morgan): $\forall x,y: \neg(\text{eats}(x,y)) \lor \text{killed}(x) \lor \text{food}(y)$
+    \item Drop universal quantifiers: $\neg(\text{eats}(x,y)) \lor \text{killed}(x) \lor \text{food}(y)$
+\end{enumerate}
+
+Inference in FOL is \defc{not decidable} but \defc{semidicidable}. This means that we can not always conclude that a sentence is not entailed.
+
+\subsection{Prolog}
+Prolog (Programming in Logic) is a FOL based logic programming language.
+
+It is based on three basic components:
+\begin{itemize}
+    \item \defc{Facts:} Statements that are unconditionally true. E.g.:
+    \begin{itemize}
+        \item \texttt{cat(john)} ''John is a cat''.
+        \item \texttt{parent(john, tom)} ''John is the parent of Tom''
+    \end{itemize}
+    \item \defc{Rules:} Conditional statements that define relationships. E.g.:
+    \begin{itemize}
+        \item \texttt{animal(X) :- cat(X)} ''X is an animal \textit{if} X is a cat''
+    \end{itemize}
+    \item \defc{Queries:} Questions asked to the program to derive answers. If multiple answers are possible, Prolog will return one per iteration in order. E.g.: 
+    \begin{itemize}
+        \item \texttt{?- cat(tom)} ''Is Tom a cat?''
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Atoms and Variables}
+\begin{minipage}
+    [t]{0.5\textwidth}
+    \begin{defbox}
+        [Atom]
+        A constant term that represents fixed values. It is denoted by lowercase letters.
+
+        Not every constant is an atom: Numbers, empty lists, some constructs (e.g. \texttt{parent(john, tom)}) are not atoms but constant.
+    \end{defbox}
+\end{minipage}
+\begin{minipage}
+    [t]{0.5\textwidth}
+    \begin{defbox}
+        [Variable]
+        A term that represents unknown or general values. It is denoted by uppercase letters or \_. 
+    \end{defbox}
+\end{minipage}
+
+\subsubsection{Prolog as a Database}
+Prolog can be regarded as a standard relational database, that stores facts and rules, which can be accessed and manipulated using Prolog queries. One caveat is that prologs backtracking strategy to retrieve all queries can be inefficient.
+
+\subsection{Gödels Incompleteness Theorem}
+\defc{Gödel's Incompleteness Theorem} states that in any formal arithmetic system, there exists a sentence that cannot be proven. This is due to the fact, that there is no formal system that is sufficiently powerful so that it is both \defc{complete} (able to prove all statements within the system) and \defc{consistent} (no contradiction exists).
+
+
+\end{document}
