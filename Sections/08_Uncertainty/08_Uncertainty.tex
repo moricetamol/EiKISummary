@@ -1,0 +1,257 @@
+\documentclass[
+../../EiKI_Summary.tex,
+]
+{subfiles}
+    
+\externaldocument[ext:]{../../EiKI_Summary.tex}
+% Set Graphics Path, so pictures load correctly
+\graphicspath{{../../}}
+
+\begin{document}
+\section{Uncertainty}
+Up until now we assumed that every statement is either true or false (or unknown) and that every action taken behaves exactly as expected.
+
+In the real world, this is not always the case. Agents almost never have access to the entire state (incomplete information). 
+
+This means that in many cases, \defc{agents must deal with uncertainty}.
+
+\subsection{Probabilities}
+One way to deal with uncertainty is to use \defc{probabilities}. 
+
+We can assign a probability to every event, to summarize effects of uncertainty, due to:
+\begin{itemize}
+    \item \defc{Laziness:}
+    \begin{itemize}
+        \item Agent is too lazy to consider all possible outcomes and possible events
+    \end{itemize}
+    \item \defc{Theoretical Ignorance:}
+    \begin{itemize}
+        \item Some things are impossible to know (e.g. Weather cannot be definitely predicted)
+    \end{itemize}
+    \item \defc{Practical Ignorance:}
+    \begin{itemize}
+        \item Some things might just not be known about an event or situation (e.g. traffic conditions)
+    \end{itemize}
+\end{itemize}
+
+Probabilities often are not based on objective truths but rather \defc{subjective beliefs}: A probability $p$ means that I believe that the statement will be true in $p \cdot 100\%$ of cases.
+
+\begin{itemize}
+    \item \defc{Degree of Belief:} There is a traffic jam in 10\% of the cases
+    \item \defc{Degree of Truth:} The street is 10\% jammed (blocked off a bit) 
+\end{itemize}
+
+\defc{Probability theory} is about \defc{degree of belief} not \textbf{degree of truth}.
+
+\subsubsection{Basics}
+The state or \defc{sample space $\Omega$} can be seen as a set of all \defc{samples $\omega$}:
+
+\begin{csmb*}
+    $\substack{\displaystyle\Omega\\ \displaystyle{\omega \in \Omega}}$
+\end{csmb*}
+
+The \defc{probability space} or probability model is a sample space with an assignment of probabilities to all samples:
+
+\begin{csmb*}
+    $\displaystyle \forall \omega \in \Omega: \space\space \exists P(\omega):\space\space
+    \sum_{\omega \in \Omega} P(\omega) = 1$
+\end{csmb*}
+
+\defc{An event} A is any subset of the sample space:
+
+\begin{csmb*}
+    $\forall A \subseteq \Omega: \space\space \exists P(A): \space\space \sum_{\omega \in A} P(\omega) = P(A)$
+\end{csmb*}
+
+\newpage
+\subsubsection{Kolmogorov's Axioms of Probability}
+\begin{enumerate}
+    \item \defc{All probabilities are between 0 and 1}\\
+    \begin{smallmathbox*}
+        $0 \leq P(A) \leq 1$
+    \end{smallmathbox*}
+    \item \defc{Necessarily true proposition have probability 1, false propositions have probability 0}\\
+    \begin{smallmathbox*}
+        $P(\text{true}) = 1, P(\text{false}) = 0$
+    \end{smallmathbox*}
+    \item \defc{The probability of a disjunction is:}\\
+    \begin{smallmathbox*}
+        $P(A \lor B) = P(A) + P(B) - P(A \land B)$
+    \end{smallmathbox*}
+    \item \defc{Axioms restrict the set of beliefs that an agent can hold:}\\
+    \begin{smalldefbox*}
+        e.g. A and $\neg$ A cannot both be true.
+    \end{smalldefbox*}
+\end{enumerate}
+
+Just as in logic, the violation of the axioms leads to inconsistent beliefs that may result in nonsensical or wrong conclusions and actions.
+
+\subsubsection{Random Variables}
+Specific events are often a bit complicated to work with. We can use \defc{random variables} in combination with \defc{atomic events} to map outcomes to atomic events:
+
+\textbf{Example: Roulette}
+\begin{itemize}
+    \item \defc{Atomic Events:} Numbers 0-36
+    \item \defc{Random Variables:}
+    \begin{itemize}
+        \item Red | Black
+        \item Odd | Even
+        \item High | Low (1-18 | 19-36)
+        \item Street | Square | Split
+        \item Dozens
+        \item \dots
+    \end{itemize}
+\end{itemize}
+
+Then for every atomic event we can apply a random variable to check whether it is true (e.g. \texttt{red(36) = true}).
+
+The probability of an event $X$ taking a specific value $x_i$ $P(X = x_i)$ is obtained by summing the probabilities of all atomic event $\omega$ that result in $X(\omega) = x_i$:
+
+\begin{csmb*}
+    $\displaystyle P(X = x_i) = \sum_{\omega:X(\omega) = x_i} P(\omega)$
+\end{csmb*}
+
+\subsubsection{Propositions}
+A proposition is a disjunction of atomic events in which it is true:
+
+\begin{csmb*}
+    $\shortstack{(a\lor b) \equiv (\neg a\land b) \lor (a \land\neg b) \lor (a \land b)\\ \rightarrow P(a\lor b) = P(\neg a\land b) + P(a\land \neg b) + P(a\land b)}$
+\end{csmb*}
+
+\begin{defbox}
+    [Syntax of Propositions]
+    \begin{itemize}
+        \item \defc{Propositional or Boolean} random can be true or false
+        \begin{itemize}
+            \item \texttt{hasUmbrella = true} is a proposition and can be written as \texttt{hasUmbrella}
+        \end{itemize}
+        \item \defc{Discrete} random variables (finite or infinite)
+        \begin{itemize}
+            \item e.g. Weather is one of \{sunny, cloudy, rainy, snow\}
+            \item \texttt{Weather = rainy} is a proposition
+            \item Values must be mutually exclusive and exhaustive (All possible cases are covered by values)
+        \end{itemize}
+        \item \defc{Continous} random variables (bounded or unbounded)
+        \begin{itemize}
+            \item e.g. Temperature
+            \item \texttt{Temp = 25.5 , Temp > 23} are propositions
+        \end{itemize}
+    \end{itemize}
+\end{defbox}
+
+\subsection{Joint Distribution}
+A joint distribution is the probability of combined events e.g. The probability that X = x and Y = y is true:
+
+\begin{csmb*}
+    $P(x,y) \equiv P(X = x \land Y = y)$
+\end{csmb*}
+
+Applying this to a whole set we can obtain a \defc{joint probability distribution truth table}:
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|c|ccc|}
+        \hline
+        \textbf{Smoking} & \textbf{No} & \textbf{Benign} & \textbf{Malignant} \\
+        \hline
+        No   & 0.768  & 0.024  & 0.008  \\
+        Few  & 0.132  & 0.012  & 0.006  \\
+        Many & 0.035  & 0.010  & 0.005  \\
+        \hline
+    \end{tabular}
+    \caption{Joint Probability Distribution of Smoking and Cancer}
+\end{table}
+
+\subsubsection{Marginalization}
+Often we don't want to talk about the joint distribution of two events, but get the marginal distribution of one event: 
+
+For any set of variables X and Y we can compute the probability 
+
+\begin{csmb*}
+    $\displaystyle P(Y) = \sum_{i=1}^{n} P(x_i,Y)$
+\end{csmb*}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|c|ccc|}
+        \hline
+        \textbf{Smoking} & \textbf{No} & \textbf{Benign} & \textbf{Malignant} \\
+        \hline
+        No   & 0.768  & 0.024  & 0.008  \\
+        Few  & 0.132  & 0.012  & 0.006  \\
+        Many & 0.035  & 0.010  & 0.005  \\
+        \hline
+    \end{tabular}
+    \caption{Joint Probability Distribution of Smoking and Cancer}
+\end{table}
+
+So for example:
+
+\begin{csmb*}
+    $P(Y = \text{few}) = P(\text{no}, \text{few}) + P(\text{benign}, \text{few}) + P(\text{malignant}, \text{few}) = 0.132 + 0.012 + 0.006 = 0.15$
+\end{csmb*}
+
+\subsubsection{Conditional Probabilities}
+The probability of X = x under the assumption that Y = y is true:
+
+\begin{csmb*}
+    $P(x|y) = \dfrac{P(x \land y)}{P(y)} = \dfrac{P(x,y)}{P(y)}$
+\end{csmb*}
+
+The product rule yields an alternative representation for the joint probability:
+
+\begin{csmb*}
+    $P(x,y) = P(x|y) \cdot P(y) = P(y|x) \cdot P(x)$
+\end{csmb*}
+
+Expanding this onto the \defc{Chain rule}:
+
+\begin{csmb*}
+    $\begin{array}{r l}
+        P(X_1, \ldots, X_n) &= P(X_1,\ldots, X_{n-1})P(X_n | X_1,\ldots, X_{n-1}) \\
+        &= P(X_1,\ldots, X_{n-2})P(X_{n-1}|X_1,\ldots, X_{n-2})P(X_n | X_1,\ldots, X_{n-1}) \\
+        &= \prod_{i=1}^{n} P(X_i | X_1,\ldots, X_{i-1})\\
+    \end{array}$
+\end{csmb*}
+
+\subsubsection{Independence}
+X and Y are independent from another if one of the following is true:
+
+\begin{csmb*}
+    $\begin{array}{c l}
+        1: & P(X|Y) = P(X)\\
+        2: & P(Y|X) = P(Y)\\
+        3: & P(X|Y) = P(X)P(Y)\\
+    \end{array}$
+\end{csmb*}
+
+Independent variables are not affected by the other variable. This reduces the amount of possible variables.
+
+However, absolute independent variables are rare.
+
+\subsubsection{Bayes Theorem}
+
+\begin{csmb*}
+    $\underbrace{P(x|y)}_{\text{Posterior}} = \dfrac{\overbrace{P(y|x)}^{\text{Likelihood}} \overbrace{P(x)}^{\text{Prior}}}{\underbrace{P(y)}_{\text{Marginalization}}}$
+\end{csmb*}
+
+\begin{itemize}
+    \item \defc{Posterior:} Probability of hypothesis X after evidence Y
+    \item \defc{Likelihood:} Probability of evidence Y given hypothesis X is true
+    \item \defc{Prior:} Probability of the hypothesis X before considering evidence Y
+    \item \defc{Marginalization:} Probability of evidence Y
+\end{itemize}
+
+\subsection{Uncertainty in AI}
+Joint distribution is done by enumerating everything:
+\begin{itemize}
+    \item \defc{Worst-Case Run Time:} $O(2^n)$
+    \begin{itemize}
+        \item n = number of random variables
+    \end{itemize}
+    \item \defc{Space Complexity:} $O(2^n)$ = size of the table
+\end{itemize}
+
+Due to this we mainly use \defc{independencies} to compress the representation.
+\end{document}
