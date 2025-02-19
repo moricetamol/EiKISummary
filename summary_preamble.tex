@@ -5,7 +5,7 @@
 \usepackage[most]{tcolorbox}
 \usepackage{graphicx}
 \usepackage[margin=2cm]{geometry}
-\usepackage[table,xcdraw,dvipsnames,svgnames]{xcolor} % More colours
+\usepackage[table,dvipsnames,svgnames]{xcolor} % More colours
 \usepackage{amsmath,amsfonts,amsthm,amssymb} % Math & symbols
 \DeclareMathOperator*{\argmin}{arg\,min}
 
@@ -16,8 +16,9 @@
 \usepackage{tabularx}
 \usepackage{array}
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 \usepackage[export]{adjustbox}
-\usepackage{gensymb}
+\usepackage{textcomp,gensymb}
 
 \usepackage[protrusion=true,expansion=true]{microtype}
 
@@ -218,15 +219,15 @@
         after=\space
     },
     definitionbox/.style={
-        colback=\MainColor!5!white,
+        colback=\MainColor!3!white,
         colframe=\MainColor!85!black
     },
     mathematicsbox/.style={
-        colback=\MathColor!5!white,
+        colback=\MathColor!3!white,
         colframe=\MathColor!85!black
     },
     codingbox/.style={
-        colback=\CodeColor!5!white,
+        colback=\CodeColor!3!white,
         colframe=\CodeColor!85!black
     }
 }
