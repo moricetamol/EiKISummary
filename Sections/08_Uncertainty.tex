@@ -1,11 +1,11 @@
 \documentclass[
-../../EiKI_Summary.tex,
+../EiKI_Summary.tex,
 ]
 {subfiles}
     
-\externaldocument[ext:]{../../EiKI_Summary.tex}
+\externaldocument[ext:]{../EiKI_Summary.tex}
 % Set Graphics Path, so pictures load correctly
-\graphicspath{{../../}}
+\graphicspath{{../}}
 
 \begin{document}
 \section{Uncertainty}
@@ -115,7 +115,10 @@ The probability of an event $X$ taking a specific value $x_i$ $P(X = x_i)$ is ob
 A proposition is a disjunction of atomic events in which it is true:
 
 \begin{csmb*}
-    $\shortstack{(a\lor b) \equiv (\neg a\land b) \lor (a \land\neg b) \lor (a \land b)\\ \rightarrow P(a\lor b) = P(\neg a\land b) + P(a\land \neg b) + P(a\land b)}$
+    $\begin{gathered}
+        (a\lor b) \equiv (\neg a\land b) \lor (a \land\neg b) \lor (a \land b)\\
+        \rightarrow P(a\lor b) = P(\neg a\land b) + P(a\land \neg b) + P(a\land b)
+    \end{gathered}$
 \end{csmb*}
 
 \begin{defbox}

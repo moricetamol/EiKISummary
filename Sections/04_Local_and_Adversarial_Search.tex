@@ -1,11 +1,11 @@
 \documentclass[
-../../EiKI_Summary.tex,
+../EiKI_Summary.tex,
 ]
 {subfiles}
     
-\externaldocument[ext:]{../../EiKI_Summary.tex}
+\externaldocument[ext:]{../EiKI_Summary.tex}
 % Set Graphics Path, so pictures load correctly
-\graphicspath{{../../}}
+\graphicspath{{../}}
 
 \begin{document}
 \section{Local and Adversarial Search}
@@ -412,32 +412,32 @@ A game can be defined as a search problem:
         \SetKwFunction{action}{get\_action}
         \SetKwFunction{maxi}{max}
         \SetKwFunction{mini}{min}
+        \SetKwFunction{algoMaxValue}{maxval}
+        \SetKwFunction{algoMinValue}{minval}
 
         \Fn{\minimaxdec{state}}{
-            v = \maxval{state}\;
+            v = \algoMaxValue{state}\;
             \tcp{Returns the action that leads to state with utility value v}
             \KwRet \action{v, \successor{state}}\;
         }
-        \Fn{\maxval{state}}{
+        \textbf{maxval(state)}\;
             \If{\isterminal{state}}{
                 \KwRet \utility{state}\;
             }
-            v = -\infty\;
+            v = $-\infty$\;
             \For{s in \successor{state}}{
-                v = \maxi{v, \minval{s}}\;
+                v = \maxi{v, \algoMinValue{s}}\;
             }
             \KwRet v\;
-        }
-        \Fn{\minval{state}}{
+        \textbf{minval(state)}\;
             \If{\isterminal{state}}{
                 \KwRet \utility{state}\;
             }
-            v = \infty\;
+            v = $\infty$\;
             \For{s in \successor{state}}{
-                v = \mini{v, \maxval{s}}\;
+                v = \mini{v, \algoMaxValue{s}}\;
             }
             \KwRet v\;
-        }
     \end{algorithm}
 \end{codebox}
 
@@ -487,16 +487,16 @@ Remove all nodes which are not affecting the final decision, but slow down the a
         \SetKwFunction{utility}{utility}
 
         \Fn{\alphabeta{state}}{
-            alpha = -\infty\;
-            beta = +\infty\;
+            alpha = $-\infty$\;
+            beta = $+\infty$\;
             v = \maximizer{state, alpha, beta}\;
             \KwRet v\;
         }
-        \Fn{\maximizer{state, alpha, beta}}{
+        \textbf{maximizer(state, alpha, beta)}\;
             \If{\isterminal{state}}{
                 \KwRet \utility{state}\;
             }
-            v = -\infty\;
+            v = $-\infty$\;
             \For{s in \successor{state}}{
                 eval = \minimizer{s, alpha, beta}\;
                 v = \maxim{v, eval}\;
@@ -506,12 +506,11 @@ Remove all nodes which are not affecting the final decision, but slow down the a
                 }
             }
             \KwRet v\;
-        }
-        \Fn{\minimizer{state, alpha, beta}}{
+        \textbf{minimizer(state, alpha, beta)}\;
             \If{\isterminal{state}}{
                 \KwRet \utility{state}\;
             }
-            v = +\infty\;
+            v = $+\infty$\;
             \For{s in \successor{state}}{
                 eval = \maximizer{s, alpha, beta}\;
                 v = \minim{v, eval}\;
@@ -521,7 +520,6 @@ Remove all nodes which are not affecting the final decision, but slow down the a
                 }
             }
             \KwRet v\;
-        }
     \end{algorithm}
 \end{codebox}
 
