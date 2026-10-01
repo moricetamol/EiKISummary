@@ -20,20 +20,20 @@ The most common definition is:
 This is flawed in that intelligence itself also does not have a set definition, and neither does human intelligence.
 
 \subsection{What is Intelligence?}
-\subsubsection{Touring Test}
-Intelligence is often defined by the Touring Test.
-Hereby it is assumed that an entity is intelligent if it cannot be distinguished from another intelligent entity by observing its behavior.
+\subsubsection{Turing Test}
+Intelligence is often defined by the Turing Test.
+Hereby it is assumed that an entity is "intelligent" if it cannot be distinguished from another intelligent entity by observing its behavior.
 
-The Touring Test is set up like this:
+The Turing Test is set up like this:
 
 \begin{enumerate}
     \item Human interrogator interacts with two entities, A and B. Hereby one of the two is already assumed to be intelligent (another human).
     \item If the interrogator cannot distinguish which entity is the assumed intelligent entity, it is assumed that the other entity is intelligent as well.
 \end{enumerate}
 
-This test is also flawed as it does not distinguish between different intelligence levels (knowledge, reasoning, language understanding, learning etc.). It also is very subjective to the interrogator. It is not based on an objective metric and therefore the outcome can differ from person to person.
+This test is flawed as it does not distinguish between different intelligence levels (knowledge, reasoning, language understanding, learning etc.). It merely assumes "intelligence" based on how human-like its conversational performance is. It also is very subjective to the interrogator. It is not based on an objective metric and therefore the outcome can differ from person to person.
 
-It also assumes that humans are inherently intelligent, which makes it a circular argument.
+It operationalizes intelligence based on proximity to human linguistic behavior, which can be seen as "human-centered" and thus incomplete. Just because humans are intelligent, does not mean that all intelligent entities must be human-like.
 
 \subsubsection{Chinese Room Argument}
 The Chinese Room Argument tries to answer the question whether intelligence is the same as intelligent behavior. It assumes that even if a machine behaves intelligently, that does not mean it is actually intelligent.
@@ -47,7 +47,7 @@ The argument goes as follows:
 
 So the person outside of the room assumes intelligence due to behavior, that does not necessitates the intelligence if the answers are already known.
 
-Is a self-driving car intelligent? Is ChatGPT intelligent?
+Is a self-driving car intelligent? Are Large-Language Models intelligent?
 
 \subsubsection{Does it even matter?}
 The question of what intelligence is is a long, complex and difficult question. However, as it is a more philosophical question it doesn't actually really affect the scientific field of AI. It's a definition, not a basis.
@@ -63,7 +63,7 @@ AIs are often divided into two categories: general AI and narrow AI.
         \item Narrow (weak) AI is defined so that it has a specific task or domain it works in.
     \end{itemize}
     This mirrors the distinction between intelligence and acting intelligent.
-    Currently, most AIs are considered narrow, general AIs are the goal in most research.
+    Most (if not all) deployed systems are considered narrow (e.g. LLMs: excel in natural language processing, performance drops in other domains). General AI is the long term research goal of some AI researchers. 
 \end{defbox}
 
 An AI should posses the following characteristics:
@@ -92,8 +92,8 @@ Usually an AI is modelled after one of the two following concepts:
     \centering
     \begin{defbox}
         [Law of Thoughts]
-        The AI should be able to reason about its own actions, arguments and thought processes.\\
-        More akin to human intelligence.
+        Systems that think rationally: Using formal logic to derive correct conclusions from a set of premises.\\
+        Based on the idea that human reasoning can be formalized and mechanized.
     \end{defbox}
 \end{minipage}
 \begin{minipage}
@@ -101,7 +101,7 @@ Usually an AI is modelled after one of the two following concepts:
     \centering
     \begin{defbox}
         [Rational Behavior]
-        The AI should be able to determine what the best action is for a given situation to maximize the achievement.\\
+        Systems that act in a way that maximizes the expected utility or value given the available information.\\
         Based on a mathematical model of rationality that achieves the most desirable outcome given the information available.
     \end{defbox}
 \end{minipage}
@@ -112,7 +112,7 @@ Rationality has two advantages
     \item \defc{More General:} For many situations a provable correct option does not exist. The most likely outcome is a better solution.
     \item \defc{More ammenable:} Rationality can be defined, refined and optimized.
 \end{itemize}
-However, rationality rarely displays a good model of reality.
+Rational-agent systems simplify real environments, thus creating possible inadequacies. However, they offer a clear normative criterion by selecting the actions expected to maximize the performance measure.
 
 Systems that think and behave like humans are often talked about in the scientific field of \defc{Cognitive Science}.
 
@@ -128,6 +128,5 @@ The field of AI is made up by many other fields:
     \item \defc{Neuroscience:} Physical substrate for mental processes
     \item \defc{Control theory:} homeostatic systems, stability, optimal agent design
 \end{itemize}
-
 
 \end{document}
