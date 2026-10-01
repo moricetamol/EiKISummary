@@ -1,11 +1,11 @@
 \documentclass[
-../../EiKI_Summary.tex,
+../EiKI_Summary.tex,
 ]
 {subfiles}
     
-\externaldocument[ext:]{../../EiKI_Summary.tex}
+\externaldocument[ext:]{../EiKI_Summary.tex}
 % Set Graphics Path, so pictures load correctly
-\graphicspath{{../../}}
+\graphicspath{{../}}
 
 \begin{document}
 \section{Logic \& AI: First-Order Logic}
@@ -155,9 +155,9 @@ Assume two sentences: $\forall x: \text{Loves}(\text{John}, x)$ ''John loves eve
 
 We can now use substitution:
 \begin{enumerate}
-    \item \{x / Jane\} \rightarrow Loves(John, Jane)
-    \item \{y / John\} \rightarrow Loves(John, Jane) $\Rightarrow$ FeelsAppreciatedBy(Jane, John)
-    \item As 1 fulfills the condition of 2, we can infer that FeelsAppreciatedBy(Jane, Jane)
+    \item $\{x / \text{Jane}\} \rightarrow \text{Loves}(\text{John}, \text{Jane})$
+    \item $\{y / \text{John}\} \rightarrow \text{Loves}(\text{John}, \text{Jane}) \Rightarrow \text{FeelsAppreciatedBy}(\text{Jane}, \text{John})$
+    \item As 1 fulfills the condition of 2, we can infer that $\text{FeelsAppreciatedBy}(\text{Jane}, \text{Jane})$
 \end{enumerate}
 
 \subsection{First-Order Conjunctive Normal Form}

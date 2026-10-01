@@ -1,11 +1,11 @@
 \documentclass[
-../../EiKI_Summary.tex,
+../EiKI_Summary.tex,
 ]
 {subfiles}
     
-\externaldocument[ext:]{../../EiKI_Summary.tex}
+\externaldocument[ext:]{../EiKI_Summary.tex}
 % Set Graphics Path, so pictures load correctly
-\graphicspath{{../../}}
+\graphicspath{{../}}
 
 \begin{document}
 \section{Logic \& AI: Propositional Logic}
@@ -98,7 +98,7 @@ A tautolgy is a sentence that is true for all possible interpretations.
 \[
 \begin{array}{|c|c|c|c|c|}
 \hline
-P & Q & P \lor Q & \neg P \land \neg Q & \defc{(P \lor Q) \lor (\neg P \land \neg Q)} \\
+P & Q & P \lor Q & \neg P \land \neg Q & \text{\defc{$(P \lor Q) \lor (\neg P \land \neg Q)$}} \\
 \hline\hline
 \text{false} & \text{false} & \text{false} & \text{true} & \text{true} \\
 \text{false} & \text{true} & \text{true} & \text{false} & \text{true} \\
@@ -115,7 +115,7 @@ Two sentences are \defc{logically equivalent} if they have the same truth value 
 \[
 \begin{array}{|c|c|c|c|}
 \hline
-P & Q & \defc{P\lor Q} & \defc{\neg (\neg P\land \neg Q)} \\
+P & Q & \text{\defc{$P\lor Q$}} & \text{\defc{$\neg (\neg P\land \neg Q)$}} \\
 \hline\hline
 \text{false} & \text{false} & \text{false} & \text{false} \\
 \text{false} & \text{true} & \text{true} & \text{true} \\
