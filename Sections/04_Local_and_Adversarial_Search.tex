@@ -9,13 +9,13 @@
 
 \begin{document}
 \section{Local and Adversarial Search}
-(Un-)Informed Search shows some limitations. Typically these algorithms can only handle search spaces with up to $10^{100}$ states due to memory constraints. They also only consider ''paths'' as a solution.
+(Un-)Informed Search shows some limitations. Memory and time requirements are often too high, especially for large state spaces.
 
 \subsection{Optimization Problems}
 \begin{defbox*}
     An optimization problem is a problem where every state can be a solution (to different degrees) but the target is to find the state that optimizes (min, max,\dots) the solution according to an objective function. 
 
-    This means that there is no explicit goal state and also no path to reach it (no cost).
+    Often, this means that only the final state's objective value matters, not the path taken to get there, thus it is not retained.
 
     For example: Darwinian evolution could be seen as an optimization problem.
 \end{defbox*}
@@ -162,7 +162,7 @@ Before our objective function only had a single input feature, now we also have 
     [t]{0.5\textwidth}
     \begin{defbox}
         [Gradient]
-        The \defc{derivative} of a function that has more than one input variable. In mathematics it would be known as the \defc{slope} of a function, which measures the change in all weights with regard to the change in error.
+        The \defc{derivative} of a function that has more than one input variable. In mathematics it would be known as the \defc{slope} of a function, which measures the change in all weights with regard to the change in error. The gradient is a vector that points in the direction of the steepest ascent of a function. The negative gradient points in the direction of the steepest descent.
     \end{defbox}
 \end{minipage}
 \begin{minipage}
@@ -175,33 +175,16 @@ Before our objective function only had a single input feature, now we also have 
 
 \begin{defbox}
     [Gradient Descent: Working Principle]
-    \begin{minipage}
-        [t]{0.5\textwidth}
-        \begin{flushright}
-            \defc{Gradient Vector} \hspace{10pt}
+    \defc{Gradient}
 
-            \begin{smallmathbox*}
-                $\nabla J(\underline{\theta}) = \left[\dfrac{\partial J(\underline{\theta})}{\partial \theta_0}, \dots, \dfrac{\partial J(\underline{\theta})}{\partial \theta_n}\right]$
-            \end{smallmathbox*}
-        \end{flushright}
-    \end{minipage}
-    \begin{minipage}
-        [t]{0.5\textwidth}
-        \begin{flushleft}
-            \hspace{10pt}\defc{Cost Function}
+    \begin{smallmathbox*}
+        $\nabla J(\theta) = \dfrac{\partial J(\theta)}{\partial \theta} = \left[\dfrac{\partial J(\theta)}{\partial \theta_0}, \dots, \dfrac{\partial J(\theta)}{\partial \theta_n}\right] = \sum_{i=0}^n \dfrac{\partial J(\theta)}{\partial \theta_i}$
+    \end{smallmathbox*}
 
-            \begin{smallmathbox*}
-                $J(x_1, x_2, \dots, x_n)$
-            \end{smallmathbox*}
-        \end{flushleft}
-    \end{minipage}
-    \\
-
-    We now want to minimize over the continous variables \inlmathbox{$x_1, x_2, \dots, x_n$}.
+    We now want to minimize $\theta$ over the continous variables. These can be any parameters, e.g. weights or biases. \inlmathbox{$x_1, x_2, \dots, x_n$}.
     \begin{enumerate}
         \item Compute gradient: \inlmathbox{$\dfrac{\partial}{\partial x_i} J(x_1, x_2, \dots, x_n)\quad \forall i \in n$}
-        \item Take a step downhill in the direction of the gradient: \inlmathbox{$x_i\prime = x_i - \lambda \dfrac{\partial}{\partial x_i} J(x_1, x_2, \dots, x_n)$}
-        \item If \inlmathbox{$J(x_1\prime, x_2\prime, \dots, x_n\prime) < J(x_1, x_2, \dots, x_n)$}, accept move, else reject.
+        \item Take a step downhill in the direction of the gradient: \inlmathbox{$x_i\prime = x_i - \alpha \dfrac{\partial}{\partial x_i} J(x_1, x_2, \dots, x_n)$}.\\ We subtract the gradient because we want to minimize the function, not maximize it. 
         \item Repeat until desired accuracy is reached
     \end{enumerate}
     
@@ -218,8 +201,8 @@ Before our objective function only had a single input feature, now we also have 
 \end{defbox}
 
 \begin{defbox}
-    [Learning Rate]
-    ''The size of the step taken in the gradient descent''. The \defc{learning rate} is a hyperparameter, controlling how quickly the model adapts to the problem.
+    [Learning Rate $\alpha$]
+    ''The size of the step taken in the gradient descent''. The \defc{learning rate $\alpha$} is a hyperparameter, controlling how quickly the model adapts to the problem.
 \end{defbox}
 
 Finding the right learning rate is a very important task. It can be done by trial and error, or by using a learning rate scheduler.
@@ -233,7 +216,7 @@ In general:
     \item \textbf{Larger learning rate:}
     \begin{itemize}
         \item Larger changes $\rightarrow$ requires fewer training epochs
-        \item Can converge to local optima or not at all
+        \item Can overshoot minima, oscillate around minima, or even diverge
     \end{itemize}
 \end{itemize}
 
@@ -245,7 +228,9 @@ Determining the gradient can be difficult.
     \item Automatic differentiation
 \end{itemize}
 
-Gradient Descent in general works well for ''smooth'' spaces; poorly for ''rough'' spaces.
+In practice, we usually use \defc{backpropagation} to compute the gradient of a neural network. More on that in Section 11.
+
+Gradient Descent in general works well for ''smooth'' spaces; poorly for ''rough'' spaces. Ideas on how to improve upon this are talked outside of the scope of this course. If you're interested check out the courses \textbf{Data Mining and Machine Learning} and \textbf{Deep Learning: Architectures and Methods}.
 
 \subsubsection{Beam Search}
 \textbf{Basic Idea:}
@@ -277,7 +262,7 @@ Gradient Descent in general works well for ''smooth'' spaces; poorly for ''rough
 \textbf{Basic Idea:}
 \begin{itemize}
     \item Use hill-climbing, but occasionally take a step into a direction that does not show improvement
-    \item Reduce the probability of a down-hill step and decrease the size of the step as the number of iterations grows
+    \item Reduce the probability of a down-hill step as the number of iterations grows
     \item Allows some ''bad moves'' to escape local optima
 \end{itemize}
 
@@ -325,7 +310,7 @@ Gradient Descent in general works well for ''smooth'' spaces; poorly for ''rough
     \end{minipage}
 \end{defbox}
 
-Simulated Annealing converges to a global optimum \textbf{if} the temperature is lowered slowly enough. This is not a strong claim as even random guessing would eventually yield the global optimum. 
+Simulated Annealing converges to a global optimum \textbf{if} the temperature is lowered slowly enough. This is not a strong claim as even random guessing could eventually yield the global optimum. 
 
 As such, simulated annealing can take a very long time.
 
@@ -341,7 +326,7 @@ Adversarial search is often time constrained, so it is unlikely to find an optim
 \subsubsection{Games}
 \begin{defbox}
     [Zero-Sum Game]
-    Describes a game whereby, if one party loses, the other must win, therefore the net change in ''points'' is zero.
+    Describes a game where one player's gain is another player's loss. The sum of all players' utility values is always zero. If one player wins, the other player loses. If one player draws, the other player draws as well.
 \end{defbox}
 
 A game can be defined as a search problem:
@@ -356,7 +341,7 @@ A game can be defined as a search problem:
 
 \begin{defbox}
     [Game Trees]
-    Game Trees are used to represent the possible states of a game. Hereby each level corresponds to a player. The \defc{root node} is always the initial (empty) state with current player. \defc{Leaf Nodes} are always terminal states. Every \defc{terminal node} has a utility value corrsponding to the outcome of the game (e.g. $+1$ for a win, $0$ for a draw, $-1$ for a loss).
+    Game Trees are used to represent the possible states of a game. Hereby each level corresponds to a player. The \defc{root node} is the initial state for the current problem. If the game has just begun, the root node would be the ''empty'' initial state. \defc{Leaf Nodes} are always terminal states. Every \defc{terminal node} has a utility value corrsponding to the outcome of the game (e.g. $+1$ for a win, $0$ for a draw, $-1$ for a loss).
 
     \begin{center}
         \includegraphics[width=0.6\textwidth]{Pics/04/TicTacToeGameTree.png}
@@ -375,13 +360,13 @@ A game can be defined as a search problem:
         \item Likely not enough time to find a goal state
         \item Needs approximation
     \end{itemize}
-    \item Most games are
+    \item Classical games assume
     \begin{itemize}
-        \item Deterministic, turn-based, two-player, zero-sum
+        \item Deterministic, turn-based, two-player, zero-sum, perfect information
     \end{itemize}
     \item Real problems are
     \begin{itemize}
-        \item Stochastic, parallel, multi-agent, utility based
+        \item Stochastic, parallel, multi-agent, utility based, partial information
     \end{itemize}
 \end{itemize}
 
@@ -420,7 +405,7 @@ A game can be defined as a search problem:
             \tcp{Returns the action that leads to state with utility value v}
             \KwRet \action{v, \successor{state}}\;
         }
-        \textbf{maxval(state)}\;
+        \Fn{\algoMaxValue(state)}{
             \If{\isterminal{state}}{
                 \KwRet \utility{state}\;
             }
@@ -429,7 +414,8 @@ A game can be defined as a search problem:
                 v = \maxi{v, \algoMinValue{s}}\;
             }
             \KwRet v\;
-        \textbf{minval(state)}\;
+        }
+        \Fn{\algoMinValue(state)}{
             \If{\isterminal{state}}{
                 \KwRet \utility{state}\;
             }
@@ -438,6 +424,7 @@ A game can be defined as a search problem:
                 v = \mini{v, \algoMaxValue{s}}\;
             }
             \KwRet v\;
+        }
     \end{algorithm}
 \end{codebox}
 
@@ -492,7 +479,7 @@ Remove all nodes which are not affecting the final decision, but slow down the a
             v = \maximizer{state, alpha, beta}\;
             \KwRet v\;
         }
-        \textbf{maximizer(state, alpha, beta)}\;
+        \Fn{\maximizer(state, alpha, beta)}{
             \If{\isterminal{state}}{
                 \KwRet \utility{state}\;
             }
@@ -506,7 +493,8 @@ Remove all nodes which are not affecting the final decision, but slow down the a
                 }
             }
             \KwRet v\;
-        \textbf{minimizer(state, alpha, beta)}\;
+        }
+        \Fn{\minimizer(state, alpha, beta)}{
             \If{\isterminal{state}}{
                 \KwRet \utility{state}\;
             }
@@ -520,6 +508,7 @@ Remove all nodes which are not affecting the final decision, but slow down the a
                 }
             }
             \KwRet v\;
+        }
     \end{algorithm}
 \end{codebox}
 
