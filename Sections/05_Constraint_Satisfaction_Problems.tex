@@ -11,7 +11,7 @@
 \section{Constraint Satisfaction Problems}
 \begin{defbox}
     [Constraint Satisfaction Problem]
-    \defc{Constraint Satisfaction} is a technique where a problem is solved when its solution satisfies certain constraints or rules of the problem.
+    \defc{Constraint Satisfaction} is a problem formalism where a problem is solved when its solution satisfies certain constraints or rules of the problem.
 \end{defbox}
 
 \defc{Components}:
@@ -120,7 +120,7 @@ To do this we map CSPs into search problems:
 \end{itemize}
 
 \subsubsection{Naive Search}
-Naive Search is practically a \textbf{brute-force} method. It systematically explores all possible assignments of v values to n variables. This, of course, is incredibly innefficient and results in exponential time complexity. The number of leaves in the search tree grows with $n!v^n$.
+Naive Search is practically a \textbf{brute-force} method. It systematically explores all possible assignments of v values to n variables. This, of course, is incredibly innefficient and results in exponential time complexity. The number of leaves in the search tree grows with $n!v^n$ if you consider all possible orderings.
 
 \subsubsection{Backtracking Search}
 \defc{Basic Idea:}
@@ -191,7 +191,7 @@ This is still not ideal as in the worst case the complexity is still exponential
     \end{itemize}
 \end{itemize}
 
-If utilized in this order, these heuristics will greatly improve search speed.
+A common strategy is MRV, Degree as a tie-breaker, and Least Constraining Value for value ordering. The effectiveness of these heuristics is problem-dependent.
 
 \subsection{Constraint Propagation}
 \begin{defbox}
@@ -201,7 +201,7 @@ If utilized in this order, these heuristics will greatly improve search speed.
 
 \begin{defbox}
     [Local Consistency]
-    Local consistency is defined by a graph where each of its nodes is consistent with its neighbors. This is done by iteratively enforcing the constraint corresponding to the edges.
+    Local consistency is a generalization of node consistency. A variable is locally consistent if it is consistent with all its neighbors. This is done by iteratively enforcing the constraint corresponding to the edges.
 \end{defbox}
 
 \begin{defbox}
@@ -228,8 +228,8 @@ Keep track of remaining legal values for unassigned variables and terminate sear
     \includegraphics[width=0.6\textwidth]{Pics/05/ForwardChecking.png}
 \end{figure}
 
-\subsubsection{Maintainting Arc Consistency (MAC)}
-After each assignment of a value to a variable, possible values of the neighbors have to be updated.
+\subsubsection{Maintaining Arc Consistency (MAC)}
+MAC enforces arc consistency after each assignment, usually by adding arcs affected by the assignment to a queue and checking them for consistency. This is done until the queue is empty.
 
 \begin{figure}
     [H]
@@ -237,7 +237,7 @@ After each assignment of a value to a variable, possible values of the neighbors
     \includegraphics[width=0.6\textwidth]{Pics/05/ArcConsistency1.png}
 \end{figure}
 
-If one variable (NSW) losses a value (blue), we need to recheck its neighbors as well because they might have lost a possible value.
+If one variable (NSW) loses a value (blue), we need to recheck its neighbors as well because they might have lost a possible value.
 
 \begin{figure}
     [H]
@@ -263,7 +263,7 @@ If one variable (NSW) losses a value (blue), we need to recheck its neighbors as
                 ($X_i,X_j$) = \remfir{queue}\;
                 \If{\remincval{$X_i$, $X_j$}}{
                     \ForEach{$X_k$ in \neighbors{$X_i$}}{
-                        queue.\adddd{$X_k$}\;
+                        queue.\adddd{($X_k$, $X_i$)}\;
                     }
                 }
             }
@@ -291,14 +291,10 @@ but sometimes may not be enough, for example if theres always a consistent value
 
 \defc{Path consistency} tightens the binary constraint by considering triples of values. 
 
-A pair of variables $(X_i,X_j)$ is path-consistent with $X_m$ if
-\begin{itemize}
-    \item for every assignment that satisfies the constraint on the arc $(X_i, X_j)$
-    \item there is an assignment that satisfies the constraints on the arcs $(X_i, X_m)$ and $(X_j, X_m)$
-\end{itemize}
+A pair of variables $(X_i,X_j)$ is path-consistent with $X_m$ if for every assignment that satisfies the constraint on the arc $(X_i, X_j)$ there is an assignment that satisfies the constraints on the arcs $(X_i, X_m)$ and $(X_j, X_m)$.
 
 \subsubsection{k-Consistency}
-k-Consistency is a generalization of path consistency. A set of k values need to be consistent. It may lead to a faster solution but checking for k-consistency is computationally expensive with exponential time in the worst case. 
+k-Consistency is a generalization of path consistency. A CSP is k-consistent if every consistent assignment of k-1 variables can be extended to any k-th variable. It may lead to a faster solution but checking for k-consistency is computationally expensive with exponential time in the worst case. 
 
 In practice, arc consistency is most frequently used.
 
@@ -347,7 +343,7 @@ Decompose the problem into subproblems with \defc{c variables} each
 This can reduce the total complexity from exponential to linear, assuming c is constant.
 
 \subsection{Tree-Structured CSPs}
-A CSP is tree-structured if in the constraint graph any two variables are connected by a single path. Any tree structured CSP can be solved in linear time in the number of variables = $O(n\cdot d^2)$
+A CSP is tree-structured if in the constraint graph any two variables are connected by a single path. Any tree structured CSP can be solved in $O(n\cdot d^2)$, which is linear in the number of variables (if d is fixed).
 
 \subsubsection{Linear Algorithm}
 \begin{enumerate}
@@ -395,6 +391,6 @@ Tree structured problems are rare.
 \begin{figure}
     [H]
     \centering
-    \includegraphics[width=0.6\textwidth]{Pics/05/CutsetConditioning.png}
+    \includegraphics[width=0.8\textwidth]{Pics/05/CutsetConditioning.png}
 \end{figure}
 \end{document}
