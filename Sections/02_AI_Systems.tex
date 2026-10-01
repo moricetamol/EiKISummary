@@ -73,21 +73,15 @@ For Example:
 \end{defbox}
 
 \begin{defbox}
-    [Accessible vs. Inaccessible]
-    \defc{Accessible:} Agent can obtain complete and accurate information about the state\\
-    \defc{Inaccessible:} Agent cannot obtain complete or only inaccurate information
-\end{defbox}
-
-\begin{defbox}
     [Deterministic vs. Stochastic / Probabilistic]
     \defc{Deterministic:} Next state is completely determined by the current state and the actions of the agents\\
-    \defc{Probabilistic:} Next state is also influenced by other factors
+    \defc{Probabilistic:} Next state is also influenced by other factors (e.g. random events)
 \end{defbox}
 
 \begin{defbox}
     [Episodic vs. Non-episodic / Sequential]
-    \defc{Episodic:} Each \textbf{episode} consists of the agent perceiving and then acting -  every action is dependent only on the episode\\
-    \defc{Non-episodic:} Actions are also dependent on past memory
+    \defc{Episodic:} Each \textbf{episode} consists of the agent perceiving and then acting. Every action is dependent only on the \textbf{current} episode\\
+    \defc{Non-episodic / Sequential:} Actions are also dependent on past states and actions.
 \end{defbox}
 
 These characteristics are important, as the environment specifies the specific needs of the agent: 
@@ -121,10 +115,11 @@ These characteristics are important, as the environment specifies the specific n
 
 \begin{defbox}
     [Rational Agents]
-    Maximizes the performance and yield the best positive outcome. \\
+    Selects the action that is expected to maximize its performance measure, given its percept sequence, prior knowledge, and available actions. \\
     Performance is hereby often measured by a function that evaluates a sequence of actions. This function is task-dependent and cannot be generalized.
 \end{defbox}
 
+\newpage
 \subsubsection{Types of Agents}
 
 \begin{defbox}
@@ -199,10 +194,10 @@ These characteristics are important, as the environment specifies the specific n
         \item Is more robust towards unknown environments
         \item A learning agent has four conceptual components:
         \begin{enumerate}
-            \item \defc{Learning Element:} Makes improvements by learning from the environment
-            \item \defc{Critic:} Gives feedback on the performance of the agent according to a fixed metric
-            \item \defc{Performance Element:} Selects the best action according to the critic
-            \item \defc{Problem Generator:} Responsible for suggesting actions that will lead to new experiences
+            \item \defc{Performance Element:} Chooses external actions.
+            \item \defc{Learning Element:} Improves the performance element based on performance feedback
+            \item \defc{Critic:} Evaluates performance against a fixed performance standard and provides feedback to the learning element
+            \item \defc{Problem Generator:} Proposes actions that will lead to new and informative experiences (exploration)
         \end{enumerate}
     \end{itemize}
 
@@ -214,10 +209,10 @@ These characteristics are important, as the environment specifies the specific n
 \subsection{Creating Intelligent Agents}
 
 \subsubsection{Search Algorithms}
-Define ''finding a good action'' as a search problem and use search algorithm to solve it. Most of these seach algorithms are tree based, altough Bread-First is used often.
+Define ''finding a good action'' as a search problem and use search algorithm to solve it. Classical search algorithms can be formulated as tree or graph search. Common options include BFS, DFS, UCS, and A*, and differ in their selection strategies and performance.
 
 \subsubsection{Reinforcement Learning}
-Developed in psychology, Reinforcement Learning essentially is a process of trial and error - Try something out, have a reaction to it, learn wether it was good or bad. Reactions or actions are based on out observations or experiences.
+First defined in psychology, Reinforcement Learning essentially is a process of trial and error. Try something out, have a reaction to it, learn whether it was good or bad. Reactions or actions are based on out observations or experiences.
 
 \begin{figure}
     [htp]
@@ -227,12 +222,12 @@ Developed in psychology, Reinforcement Learning essentially is a process of tria
 
 \newpage
 \subsubsection{Genetic Algorithms}
-Inspired by Darwins ''Theory of natural selection'', this model build multiple different agents and evaluates every one of them. The agent with the highest performance is selected and new models are built based on it. This is done until the performance is good enough.
+Inspired by Darwins ''Theory of natural selection'', this model build multiple different agents and evaluates every one of them. The agents with the highest performance are selected and new models are built based on it. It can also combine the best features of multiple agents to create new agents, creating a sort of ''evolutionary'' process. 
 
 \begin{figure}
     [htp]
     \centering
-    \includegraphics[width=0.5\textwidth]{Pics/02/GeneticAlgorithms.png}
+    \includegraphics[width=\textwidth]{Pics/02/GeneticAlgorithms.png}
 \end{figure}
 
 
