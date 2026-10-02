@@ -15,7 +15,7 @@ A Bayesian Network is \defc{directed, acyclic graph} with
 
 \begin{itemize}
     \item \defc{Nodes:} One node per variable
-    \item \defc{Edges:} A directed edge from node $N_i$ to node $N_j$ indicates that the corresponding variable $X_i$ has a direct influence on $X_j$
+    \item \defc{Edges:} A directed edge from node $N_i$ to node $N_j$ encodes a direct conditional dependence of $N_j$ on $N_i$. It may represent a causal relationship, but it does not have to.
 \end{itemize}
 
 \defc{Set of random variables $\{X_1, \ldots, X_n\}$}
@@ -40,11 +40,11 @@ A Bayesian Network is \defc{directed, acyclic graph} with
 
 \defc{Conditional Probability Distribution (CPD)}
 \begin{itemize}
-    \item Each randome variable $X_i$ in the network is associated with a CPD given its parents $(Pa(X_i))$
+    \item Each random variable $X_i$ in the network is associated with a CPD given its parents $(Pa(X_i))$
     \item \begin{smallmathbox*}
             $P(X_i | Pa(X_i))$
     \end{smallmathbox*}
-    \item Each variable is probabilistically dependent on its parents
+    \item Each node has a conditional probability distribution conditioned on its parents. If a node has no parents, then it is associated with a prior distribution.
 \end{itemize}
 
 \defc{Joint Distribution:}
@@ -65,7 +65,8 @@ Each random variable $X_i$ is conditionally independent of its non-descendants, 
 A \defc{na\"ive Bayes} model assumes that all effects are independent given the cause:
 
 \begin{csmb*}
-    $\displaystyle P(\text{hypothesis}, \text{evidence}_1, \ldots, \text{evidence}_n) = P(\text{hypothesis}) \cdot \prod_{i=1}^{n} P(\text{evidence}_i | \text{hypothesis})$
+    $\displaystyle P(H, E_1, \ldots, E_n) = P(H) \cdot \prod_{i=1}^{n} P(E_i | H)$\\
+    $E$ is the evidence, $H$ is the hypothesis
 \end{csmb*}
 
 \begin{figure}[H]
@@ -162,7 +163,7 @@ Assume we want to compute P(d), so we need to \defc{eliminate} v,s,t,c,a,b,x.
 The \defc{probability distribution} is given as the product of multiple factors:
 
 \begin{csmb*}
-    $P(v,s,t,c,a,b,x,c) = P(v)P(s)P(t|v)P(c|s)P(b|s)P(a|c,l)P(x|a)P(d|a,b)$
+    $P(v,s,t,c,a,b,x,d) = P(v)P(s)P(t|v)P(c|s)P(b|s)P(a|c,l)P(x|a)P(d|a,b)$
 \end{csmb*}
 
 Lets choose the elimination order: v,s,x,t,c,a,b
@@ -189,7 +190,7 @@ This unfortunately is not efficient.
 \begin{center}
     \begin{smalldefbox}
         [Theorem]
-        Inference (even approximate in Bayesion networks is NP-Hard)
+        In general, exact inference in Bayesian Networks is computationally intractable (NP-hard).
     \end{smalldefbox}
 \end{center}
 
@@ -322,7 +323,7 @@ This converges towards the joint probability function.
         \SetKwFunction{normalize}{normalize}
 
         \Fn{\mcmcask{X,e,belief\_network, num\_samples} $\rightarrow$ estimate of $P(X|e)$}{
-            count\_X = [] \tcp{number of times each X occurs, initially 0 for all}
+            count$_X$ = [] \tcp{number of times each X occurs, initially 0 for all}
             Z = [non-evidence variables] \tcp{list of non-evidence variables}
             x = e \tcp{current state of the network, initially e}
 
@@ -333,7 +334,7 @@ This converges towards the joint probability function.
                 \ForEach{$Z_i \in Z$}{
                     x[$Z_i$] = sample from $P(Z_i | \text{markov\_blanket}(Z_i))$
                 }
-                count\_X[x] += 1 \tcp{x is the value of X in x}
+                count$_X$[X = x[X]] += 1 \tcp{x is the value of X in x}
             }
             \KwRet \normalize{count\_X}
         }
@@ -344,11 +345,15 @@ More samples result in better approximates.
 
 \begin{defbox}
     [Markov Blanket]
-    A Markov Blanket is a set of variables that are conditionally independent of a variable given all other variables in the network. It consists of \defc{parents (direct causes), children (direct effects) and childrens parents (co-causes)}.
-    Alternatively: A markov blanket includes all variables that \defc{directly influence} or \defc{are influenced} by a variable $X$. Everything outside of the markov blanket is irrelevant to $X$. This makes it easier to compute probabilities.
+    A Markov Blanket is the minimal set of variables $MB(X)$ such that $X$ is conditionally independent of all other variables in the network given $MB(X)$. It consists of \defc{parents (direct causes), children (direct effects) and childrens parents (co-causes)}.
+    Alternatively: A markov blanket includes all variables that \defc{directly influence} or \defc{are influenced} by a variable $X$. Everything outside of the markov blanket is irrelevant to $X$, if we know all direct influences. This makes it easier to compute probabilities.
 
     \begin{csmb*}
-        $P(X | U_1, \ldots, U_m, Y_1, \ldots, Y_n, Z_{1j}, \ldots, Z_{nj}) = P(X | \text{all variables})$
+        $\begin{array}{c}
+        P(X | MB(X), O) = P(X | MB(X))\\
+        MB(X) = \{U_1, \dots, U_m, Y_1, \dots, Y_n, Z_{1j}, \dots, Z_{nj}\}\\
+        O \text{ is all variables outside of } MB(X) \cup X
+        \end{array}$
     \end{csmb*}
 
     \begin{center}
@@ -363,7 +368,7 @@ More samples result in better approximates.
     \begin{enumerate}
         \item \defc{Initialize} all variables with random values
         \item \defc{Iterate through each variable}, updating it based on Markov Blanket
-        \item \defc{Repeat} until samples converge to the true distribution
+        \item \defc{Repeat} until samples converge asymptotically to the target posterior
     \end{enumerate}
 
     Gibbs Sampling utilized Markov Blankets by reducing the number of variables that need to be considered at each step.
