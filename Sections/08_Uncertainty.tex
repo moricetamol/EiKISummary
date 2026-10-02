@@ -11,14 +11,10 @@
 \section{Uncertainty}
 Up until now we assumed that every statement is either true or false (or unknown) and that every action taken behaves exactly as expected.
 
-In the real world, this is not always the case. Agents almost never have access to the entire state (incomplete information). 
-
-This means that in many cases, \defc{agents must deal with uncertainty}.
+In the real world, this is not always the case. Agents almost never have access to the entire state (incomplete information). This means that in many cases, \defc{agents must deal with uncertainty}.
 
 \subsection{Probabilities}
-One way to deal with uncertainty is to use \defc{probabilities}. 
-
-We can assign a probability to every event, to summarize effects of uncertainty, due to:
+One way to deal with uncertainty is to use \defc{probabilities}. We can assign a probability to every event, to summarize effects of uncertainty, due to:
 \begin{itemize}
     \item \defc{Laziness:}
     \begin{itemize}
@@ -34,7 +30,8 @@ We can assign a probability to every event, to summarize effects of uncertainty,
     \end{itemize}
 \end{itemize}
 
-Probabilities often are not based on objective truths but rather \defc{subjective beliefs}: A probability $p$ means that I believe that the statement will be true in $p \cdot 100\%$ of cases.
+Probabilities can be interpreted in several ways, including frequentist long-run frequencies and Bayesian subjective beliefs. 
+Frequentist probabilities are based on the idea that the probability of an event is the limit of its relative frequency in a large number of trials. Bayesian probabilities, on the other hand, represent an agent's degree of belief in an event, which can be updated as new evidence is obtained. AI systems often use Bayesian probabilities to model uncertainty and make decisions based on incomplete information. Degree of belief and degree of truth are two different concepts that are often confused:
 
 \begin{itemize}
     \item \defc{Degree of Belief:} There is a traffic jam in 10\% of the cases
@@ -57,27 +54,38 @@ The \defc{probability space} or probability model is a sample space with an assi
     \sum_{\omega \in \Omega} P(\omega) = 1$
 \end{csmb*}
 
+This is a simplified version of the probability space, which is sufficient for our purposes. In general, a probability space is defined as a triple $(\Omega, \mathcal{F}, P)$, where $\Omega$ is the sample space, $\mathcal{F}$ is a $\sigma$-algebra of events (subsets of $\Omega$), and $P$ is a probability measure that assigns probabilities to events in $\mathcal{F}$.
+
 \defc{An event} A is any subset of the sample space:
 
 \begin{csmb*}
     $\forall A \subseteq \Omega: \space\space \exists P(A): \space\space \sum_{\omega \in A} P(\omega) = P(A)$
 \end{csmb*}
 
-\newpage
 \subsubsection{Kolmogorov's Axioms of Probability}
 \begin{enumerate}
     \item \defc{All probabilities are between 0 and 1}\\
     \begin{smallmathbox*}
         $0 \leq P(A) \leq 1$
     \end{smallmathbox*}
-    \item \defc{Necessarily true proposition have probability 1, false propositions have probability 0}\\
+    \item \defc{The probability of the entire sample space is 1, and the probability of the empty set is 0}:\\
     \begin{smallmathbox*}
-        $P(\text{true}) = 1, P(\text{false}) = 0$
+        $P(\Omega) = 1, P(\emptyset) = 0$
     \end{smallmathbox*}
-    \item \defc{The probability of a disjunction is:}\\
+    \item \defc{The probability of a union of disjoint events is the sum of their individual probabilities}:\\
     \begin{smallmathbox*}
-        $P(A \lor B) = P(A) + P(B) - P(A \land B)$
+        $P(\bigcup_{i=1}^n A_i) = \sum_{i=1}^n P(A_i)$
     \end{smallmathbox*}
+    \begin{itemize}[label=$\rightarrow$]
+        \item \defc{The probability of any two events A and B is given by:}\\
+            \begin{smallmathbox*}
+                $P(A \cup B) = P(A) + P(B) - P(A \cap B)$
+            \end{smallmathbox*}
+        \item \defc{The probability of the complement of an event A is given by:}\\
+            \begin{smallmathbox*}
+                $P(\neg A) = 1 - P(A)$
+            \end{smallmathbox*}
+    \end{itemize}
     \item \defc{Axioms restrict the set of beliefs that an agent can hold:}\\
     \begin{smalldefbox*}
         e.g. A and $\neg$ A cannot both be true.
@@ -87,18 +95,17 @@ The \defc{probability space} or probability model is a sample space with an assi
 Just as in logic, the violation of the axioms leads to inconsistent beliefs that may result in nonsensical or wrong conclusions and actions.
 
 \subsubsection{Random Variables}
-Specific events are often a bit complicated to work with. We can use \defc{random variables} in combination with \defc{atomic events} to map outcomes to atomic events:
+Specific events are often a bit complicated to work with. A random variable is a function from outcomes in the sample space $\Omega$ to values in a codomain, e.g. $X: \Omega \rightarrow \mathcal{X}$.
 
 \textbf{Example: Roulette}
 \begin{itemize}
-    \item \defc{Atomic Events:} Numbers 0-36
-    \item \defc{Random Variables:}
+    \item \defc{Atomic Events ($\in \Omega$):} Numbers 0-36
+    \item \defc{Random Variables ($X \in \mathcal{X}$):}
     \begin{itemize}
         \item Red | Black
         \item Odd | Even
         \item High | Low (1-18 | 19-36)
         \item Street | Square | Split
-        \item Dozens
         \item \dots
     \end{itemize}
 \end{itemize}
@@ -155,7 +162,7 @@ Applying this to a whole set we can obtain a \defc{joint probability distributio
     \renewcommand{\arraystretch}{1.3}
     \begin{tabular}{|c|ccc|}
         \hline
-        \textbf{Smoking} & \textbf{No} & \textbf{Benign} & \textbf{Malignant} \\
+        Smoking / \textbf{Cancer} & \textbf{No} & \textbf{Benign} & \textbf{Malignant} \\
         \hline
         No   & 0.768  & 0.024  & 0.008  \\
         Few  & 0.132  & 0.012  & 0.006  \\
@@ -225,7 +232,7 @@ X and Y are independent from another if one of the following is true:
     $\begin{array}{c l}
         1: & P(X|Y) = P(X)\\
         2: & P(Y|X) = P(Y)\\
-        3: & P(X|Y) = P(X)P(Y)\\
+        3: & P(X,Y) = P(X)P(Y)\\
     \end{array}$
 \end{csmb*}
 
