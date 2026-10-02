@@ -18,7 +18,7 @@ Logic is the key behind any formal knowledge. It allows to filter neccessary inf
 
 \begin{defbox}
     [Knowledge Base (KB)]
-    A knowledge base represents actual facts which exist in the real world. It is a central component of any knowledge-based agent. It is a collection of ''sentences'' in a formal language which describe the information related to the world.
+    A knowledge base is a collection of sentences in a formal language representing an agents information or beliefs about a domain. In real life, the agents knowledge base is often incomplete and may contain errors. The knowledge base is used to answer questions about the world and to make decisions.
 \end{defbox}
 
 \begin{defbox}
@@ -42,6 +42,7 @@ Logic is the key behind any formal knowledge. It allows to filter neccessary inf
             \SetKwFunction{tell}{tell}
             \SetKwFunction{ask}{ask}
             \SetKwFunction{makeperceptsentence}{make\_percept\_sentence}
+            \SetKwFunction{makeactionsentence}{make\_action\_sentence}
             \SetKwFunction{makeactionquery}{make\_action\_query}
 
             kb; \tcp*[h]{The knowledge base}
@@ -49,7 +50,7 @@ Logic is the key behind any formal knowledge. It allows to filter neccessary inf
             \Fn{\kbagent{percept}}{
                 \tell{kb, \makeperceptsentence{percept,t}}\;
                 action = \ask{kb, \makeactionquery{t}}\;
-                \tell{kb, \makeperceptsentence{action,t}}
+                \tell{kb, \makeactionsentence{action,t}}
                 t++\;
                 \KwRet action
             }
@@ -69,11 +70,11 @@ A sentence in propositional logic follows the \defc{Backus-Naur Form (BNF)}:
 
 \begin{tabular}{r l l}
     \defc{Symbol:}   & P, Q, R,\dots & Descriptor of a sentence\\
-    \defc{Sentence:} & True | False | Symbol | & Logical implication of a sentence\\
+    \defc{Sentence:} & True | False | Symbol | & Sentence / Statement that evaluates to a truth value\\
     & $\neg$(Sentence) | &\\
     & (Sentence $\land$ Sentence) | &\\
     & (Sentence $\lor$ Sentence) | &\\
-    & (Sentence $\Rightarrow$ Sentence) &\\
+    & (Sentence $\Rightarrow$ Sentence) \dots &\\
 \end{tabular}
 
 \subsection{Semantics}
@@ -96,14 +97,14 @@ a & b & \neg a & a \land b & a \lor b & a \Rightarrow b \\
 \subsection{Tautology}
 A tautolgy is a sentence that is true for all possible interpretations.
 \[
-\begin{array}{|c|c|c|c|c|}
+\begin{array}{|c|c|c|c|c|c|}
 \hline
-P & Q & P \lor Q & \neg P \land \neg Q & \text{\defc{$(P \lor Q) \lor (\neg P \land \neg Q)$}} \\
+P & Q & P \lor Q & \neg P \land \neg Q & \text{\defc{$P \lor \neg P$}} & \text{\defc{$(P \lor Q) \lor (\neg P \land \neg Q)$}} \\
 \hline\hline
-\text{false} & \text{false} & \text{false} & \text{true} & \text{true} \\
-\text{false} & \text{true} & \text{true} & \text{false} & \text{true} \\
-\text{true} & \text{false} & \text{true} & \text{false} & \text{true} \\
-\text{true} & \text{true} & \text{true} & \text{false} & \text{true} \\
+\text{false} & \text{false} & \text{false} & \text{true} & \text{true} & \text{true} \\
+\text{false} & \text{true} & \text{true} & \text{false} & \text{true} & \text{true} \\
+\text{true} & \text{false} & \text{true} & \text{false} & \text{true} & \text{true} \\
+\text{true} & \text{true} & \text{true} & \text{false} & \text{true} & \text{true} \\
 \hline
 \end{array}
 \]
@@ -179,7 +180,7 @@ To find out whether a sentence $A$ is entailed by knowledge base as simple algor
 \end{enumerate}
 
 \textbf{Problem:}
-Not very efficient: The number of setting increases with $2^{\text{\# propositional variables}}$
+Not very efficient: The number of setting increases with $2^{\text{propositional variables}}$
 
 \subsubsection{Principle of Non-Contradiction}
 \begin{defbox*}
@@ -187,7 +188,7 @@ Not very efficient: The number of setting increases with $2^{\text{\# propositio
 	''A cannot be $\neg$ A''
     \end{center}
 
-    Two contradictionary statements cannot be true at the same time, as that would mean that anything could be true.
+    Two contradictionary statements cannot be true at the same time, as that permits \textbf{explosion}: Any statement can be inferred from a contradiction.
 \end{defbox*}
 
 \textbf{Example:}
@@ -197,9 +198,11 @@ PetIsAPenguin $\Rightarrow$ PetIsABird\\
 PetIsAPenguin $\Rightarrow$ $\neg$(PetCanFly)\\
 PetIsAPenguin
 
-This would imply that a penguin can both fly and not fly. If you would work with this contradictionary predicate it could imply anything like:
+This would imply that a penguin can both fly and not fly. If you would work with this contradictionary predicate you could infer any statement:
 
 PetCanFly $\lor$ MoonMadeOfCheese $\equiv$ True
+
+Here we say "Either the pet can fly or the moon is made of cheese". But since we also assume that the pet is a penguin, and therefore can't fly, we can conclude that the only remaining option to fulfill the statement is that the moon is made of cheese. This is obviously not true, but we could have inferred it from a contradiction.
 
 \subsection{Conjunctive Normal Form (CNF)}
 The CNF is a way to write any knowledge base as a single formula:
@@ -211,7 +214,7 @@ The CNF is a way to write any knowledge base as a single formula:
     \end{center}
     \begin{itemize}
         \item Can be a symbol x or $\neg$(x) (\defc{Literals})
-        \item Multiple fats in knowledge base are ''AND''ed together
+        \item Multiple facts in knowledge base are ''AND''ed together
     \end{itemize}
 \end{defbox}
 
@@ -260,17 +263,20 @@ So to see if a sentence $A$ is entailed we can simply add $\neg$A to the knowled
 \subsubsection*{Special Case: Horn Clauses}
 \begin{defbox}
     [Horn Clauses]
-    Horn clauses are implications with only positive (no negations) literals:
+    Horn clauses are a disjunction of literals with at most one positive (i.e. unnegated) literal. We can distinguish between Definite Clauses (exactly one positive literal), Goal Clauses (no positive literals) and Facts (exactly one positive literal and no negative literals).
 
     \begin{center}
-        $X_1 \land X_2 \land X_4 \Rightarrow X_3 \land X_6$\\
-        True $\Rightarrow X_1$
+        \begin{itemize}
+            \item $X_1 \land X_2 \land \dots \land X_n \implies Y$ (Definite Clause)
+            \item $X_1 \land X_2 \land \dots \land X_n \implies$ False (Goal Clause)
+            \item True $\Rightarrow X_1$ (Fact)
+        \end{itemize}
     \end{center}
 \end{defbox}
 
 To find out whether a literal $X_j$ is entailed:
 \begin{enumerate}
-    \item Start from known imlications as far as possible
+    \item Start from known implications as far as possible
     \item If $X_j$ is reachable it is entailed
 \end{enumerate}
 
