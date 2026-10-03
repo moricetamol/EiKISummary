@@ -23,7 +23,7 @@ Mathematically this is typically represented by a \defc{Markov Decision Process 
 
 Reinforcement learning differs from supervised learning, that we never explicitly show a desired outcome, we merely give feedback. Additionally we never correct sub-optimal actions.
 
-One of the biggest problems in RL is how we assign rewards to actions. A lot of the time we do not assign a reward to just one action, as that would be very inefficient, but rather to a sequence of actions.
+One of the biggest problems in RL is how we assign rewards to actions. A lot of the time we do not assign a reward to just one action as that would be very inefficient, but rather to a sequence of actions.
 
 \begin{itemize}
     \item Given a sequence of states and actions how do we define which actions were effective and ineffective?
@@ -33,7 +33,7 @@ One of the biggest problems in RL is how we assign rewards to actions. A lot of 
 \end{itemize}
 
 \subsection{Markov Decision Process (MDP)}
-An MDP is defined by a 4D-tuple ($S,A,T_a,R_a$), where:
+A simple MDP is defined by a 5-tuple ($S,A,T_a,R_a,\gamma$), where:
 \begin{itemize}
     \item \defc{$S$:} A set of states $s \in S$
     \item \defc{$A$:} A set of actions $a \in A$
@@ -44,11 +44,13 @@ An MDP is defined by a 4D-tuple ($S,A,T_a,R_a$), where:
     \end{itemize}
     \item \defc{$R_a$:} Reward function $R(s,a,s')$
     \begin{itemize}
+        \item Reward for taking action a in state s and ending up in state s'
         \item Sometimes just $R(s)$ or $R(s')$
     \end{itemize}
+    \item \defc{Discount factor $\gamma$:} How much we discount future rewards
 \end{itemize}
 
-Has a \defc{start state} (or distribution), an optional \defc{terminal state} and a \defc{discount factor} $\gamma$.
+Additionally, it has an initial state distribution $P(s_0)$ and a terminal state $s_T$ (Termination condition).
 
 \begin{figure}
     [H]
@@ -70,7 +72,7 @@ Has a \defc{start state} (or distribution), an optional \defc{terminal state} an
 \subsubsection{Solve MDPs}
 To solve an MDP we want to compute an \defc{optimal policy $\pi^\ast: S \rightarrow A$}.
 \begin{itemize}
-    \item A policy gives an action for each state
+    \item A policy maps states to distributions over (or directly) actions.
     \item An optimal policy maximizes expected utility
     \item Defines a reflex agent
 \end{itemize}
@@ -80,6 +82,7 @@ To solve an MDP we want to compute an \defc{optimal policy $\pi^\ast: S \rightar
     \begin{defbox}
         [Deterministic Policy]
         \centering
+        A policy that deterministically maps each state to a \textbf{single action}.\\
         $a_t = \pi(s_t)$
     \end{defbox}
 \end{minipage}
@@ -88,17 +91,24 @@ To solve an MDP we want to compute an \defc{optimal policy $\pi^\ast: S \rightar
     \begin{defbox}
         [Stochastic Policy]
         \centering
+        A policy that maps each state to a \textbf{distribution} over actions.\\
         $a_t \sim \pi(\cdot|s_t)$
     \end{defbox}
 \end{minipage}
 
-At any time $t$, the agent tries to select an action to maximize the sum $G_t$ of discounted rewards received in the future:
+At any time $t$, the agent tries to select an action to maximize the sum $G_t$ (\defc{Return}) of discounted rewards received in the future:
 
 \begin{csmb*}
-    $G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots = \sum_{k=0}^{T-t-1} \gamma^k R_{t+k+1}$
+    $G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}$
 \end{csmb*}
 
-We discount \defc{future rewards} with the discount factor $\gamma$ to account for uncertainty in the future. $\gamma \in [0,1]$ is often set to $0.9$.
+We discount \defc{future rewards} with the discount factor $\gamma$ to improve multiple things:
+\begin{itemize}
+    \item It reflects the uncertainty of the future
+    \item It makes the problem mathematically tractable / Finite mathematical returns
+    \item It encourages the agent to find policies that lead to earlier rewards
+\end{itemize}
+$\gamma \in [0,1]$ is often set to $0.9$.
 
 For each state we calculate a \defc{utility value} equal to the sum of future rewards.
 
@@ -153,7 +163,7 @@ Reinforcement learning assumes an MDP:
     \item \defc{Discount factor $\gamma$}
 \end{itemize}
 
-The twist: We don't know the model and the reward function. We only have access to the environment. So we must actually try out actions and states to learn.
+The twist: In passive reinforcement learning, the agent follows a fixed policy and estimates its value. In active reinforcement learning, the agent must explore the environment to find the optimal policy / learn.
 
 \begin{minipage}
     [t]{0.5\textwidth}
@@ -202,11 +212,23 @@ The twist: We don't know the model and the reward function. We only have access 
 
 \begin{defbox}
     [Sample-Based Policy Evaluation]
-    Improve estimate of V by computing rather than a single action:
+    Improve estimate of V by evaluating an average over multiple samples rather than a single action:
+    
+    \begin{minipage}
+        [t]{0.5\textwidth}
+        \begin{mathbox}
+            [Return Average]
+        $V^\pi(s) \leftarrow \frac{1}{n} \sum_{i=1}^n G_i$
+        \end{mathbox}
+    \end{minipage}
+    \begin{minipage}
+        [t]{0.5\textwidth}
+        \begin{mathbox}
+            [Incremental Update]
+            $V^\pi(s_{t+1}) \leftarrow V^\pi(s_t) + \alpha (G_t - V^\pi(s_t))$
+        \end{mathbox}
+    \end{minipage}
 
-    \begin{csmb*}
-        $V_{k+1}^\pi = \frac{1}{n} \sum_{i} \text{sample}_i$
-    \end{csmb*}
 \end{defbox}
 
 \begin{defbox}
@@ -214,8 +236,10 @@ The twist: We don't know the model and the reward function. We only have access 
     Instead of waiting for full episode completion, we update the value function $V(s)$ each time $s$ occurs. 
 
     \begin{csmb*}
-        $V^\pi(s) = (1 - \alpha)V^\pi(s) + \alpha(sample)$
+        $V^\pi(s_{t+1}) \leftarrow V^\pi(s_t) + \alpha (G_t - V^\pi(s_t))$
     \end{csmb*}
+
+    $\alpha$ is the learning rate.
 \end{defbox}
 
 \begin{defbox}
@@ -223,10 +247,10 @@ The twist: We don't know the model and the reward function. We only have access 
     Q-Learning keeps track of samples and their Q-values, so that in the future it knows better which action to take in which situation.
 
     \begin{csmb*}
-        $Q_{k+1}(s,a) = \sum_{s'} T(s,a,s') \left[R(s,a,s') + \gamma \underset{a'}{\max}Q_k(s',a')\right]$
+        $Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [R_{t+1} + \gamma \max_a Q(s_{t+1}, a) - Q(s_t, a_t)]$
     \end{csmb*}
 
-    Q-Learning yields great results if enough exploration is done and if the learning rate is small enough. It basically doesn't matter how actions are selected.
+    Q-Learning yields great results if enough exploration is done and if the learning rate is small enough. For the exploration, typically every relevant state-action par must be visited infinitely often in order to guarantee convergence to the optimal policy. In practice, that is not feasible, but Q-Learning still works well in many situations.
 
     However, Q-Learning is very space-inefficient as it keeps a table of all q-values. Additionally in most realistic situations it is impossible to learn about every single state - Too many states to visit and too many states to hold in memory.
 \end{defbox}
@@ -249,9 +273,9 @@ How do we choose which action to take next?
 \end{itemize}
 
 \subsubsection{Deep Q-Networks (DQN)}
-Similar to Q-Learning, but instead of using a Q-table to keep track of actions we train a deep neural network to estimate the best action. 
+Similar to Q-Learning, but instead of using a Q-table to keep track of actions we train a deep neural network to estimate the best action. The DQN approximates $Q(s,a)$, the expected return of each action.
 
-Uses $\varepsilon$-Greedy policy to select actions.
+Uses $\varepsilon$-Greedy policy to select actions, essentially selecting $\arg \max_a Q(s,a)$ (with random exploration). 
 
 The learning process is similar to training a neural network using \defc{backpropagation}.
 
@@ -292,7 +316,7 @@ Hereby the search depth and breadth might be limited using the policy prediction
 
 \subsubsection{Training Objective: Loss Formulization}
 \begin{csmb*}
-    $l = \underbrace{\alpha(z-v)^2}_{\text{Mean Squared Error}}-\underbrace{\pi^T\log p}_{\text{Cross Entropy}} + \underbrace{||\theta||^2}_{Regularizer}$
+    $l(\theta) = \underbrace{\alpha(z-v)^2}_{\text{Mean Squared Error}}-\underbrace{\pi^T\log p_{\theta}(s)}_{\text{Cross Entropy}} + \underbrace{c||\theta||_2^2}_{Regularizer}$
 \end{csmb*}
 
 \begin{itemize}
