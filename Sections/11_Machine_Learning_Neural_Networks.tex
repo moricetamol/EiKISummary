@@ -17,10 +17,10 @@ Learning also makes an agent ''aware'' of their environment. Rather than trying 
 Lastly, Learning improves the agents decision mechanisms the longer it is active. No longer will an agent repeat actions hoping for different results (e.g. local extrema).
 
 \subsubsection{Methods of Learning}
-\defc{Memorization (Declarative Knowledge):}\\
+\defc{Memorization:}\\
 Accumulates individual facts and their outcomes. This is limited by the time to observe facts and memory to store facts.
 
-Better: \defc{Generalization (Imperative Knowledge):}\\
+Better: \defc{Generalization:}\\
 Deduce new facts from old facts. Limited by accuracy of deduction process, assumes relations between past and future.
 
 \subsubsection{Inductive Learning}
@@ -33,13 +33,13 @@ Inductive learning is the simplest form of learning. It deduces a trend from exa
     \item Use examples to find a hypothesis $h$ such that $h \approx f$
 \end{itemize}
 
-Hypothesis $h$ is \defc{consistent} if \inlmathbox{$\forall x: h(x) = f(x)$}.
+Hypothesis $h$ is \defc{consistent} if \inlmathbox{$\forall (x_i, y_i) \in D: h(x_i) = y_i$}.
 
 \begin{minipage}
     [t]{0.5\textwidth}
     \begin{defbox}
         [Ockhams Razor]
-        The \defc{best explanation} is the \defc{simplest explanation} that fits the data
+        The \defc{best explanation} is the \defc{simplest explanation} (i.e. fewest assumptions) that fits the data
     \end{defbox}
 \end{minipage}
 \begin{minipage}
@@ -65,8 +65,8 @@ Human learning is often
 
 Machine learning is often inspired by human learning, the goal however, is not to recreate human learning.
 \begin{itemize}
-    \item May borrow idead from human learning (e.g. neural networks)
-    \item May perform better or worse
+    \item May borrow ideas from human learning (e.g. neural networks)
+    \item May perform better or worse, depending on the task, available data and model architecture
 \end{itemize}
 
 \subsubsection{Designing a Learning System}
@@ -135,7 +135,7 @@ Machine learning is often inspired by human learning, the goal however, is not t
         [Classification Task]
         \begin{itemize}
             \item y is a discrete class label
-            \item Algorithm tries to predict a continous value describing the label probability
+            \item Model predicts a discrete class label, often via class scores or estimated class probabilities
             \item Example: Will it be above 0\degree C tomorrow?
         \end{itemize}
 
@@ -148,7 +148,7 @@ Machine learning is often inspired by human learning, the goal however, is not t
 \subsubsection{Representation}
 Machine learning algorithms need to handle a lot of different data (e.g. images, audio, etc.). 
 
-To make this as easy as possible we represent out input as an \defc{input vector} (in $\mathbb{R}^n$). Vectors are a great representation as we can transform the data using linear algebra. 
+To make this as easy as possible, one option is to represent our input as an \defc{input vector} (in $\mathbb{R}^n$). Vectors are a great representation as we can transform the data using linear algebra. Other representations include tensors, graphs, sets, structured symbolic data, etc.
 
 \begin{defbox}
     [Representation]
@@ -221,15 +221,19 @@ Which metric is best depends on the problem we are trying to solve.
 \subsubsection{Overfitting}
 Overfitting describes the problem, that a model is trained ''too well'' so that its closer to memorization than generalization. This means that the model is not able to generalize to new data and therefore performs worse on new data.
 
-To deal with overfitting we can:
+To find out if a model is overfitting we can use the following steps:
 \begin{itemize}
     \item Splitting data
     \begin{itemize}
-        \item Split data into training and test data  
+        \item Split data into training and test data
     \end{itemize}
+    \item Train the model on the training data
+    \item Evaluate the model on the test data
+    \item If the model performs well on the training data but poorly on the test data, we have overfitting
 \end{itemize}
 \includegraphics[width=\textwidth]{Pics/11/SplittingData.png}
 
+To avoid overfitting we can use the following methods:
 \begin{itemize}
     \item Regularization 
     \item Use more data, augement data (adding noise)
@@ -237,6 +241,8 @@ To deal with overfitting we can:
     \item Cross validation
     \item Ensemble methods
 \end{itemize}
+
+These will not be dicussed in detail here, check out other advanced machine learning courses for more information. (DMML, DLAM, etc.)
 
 \newpage
 \subsection{Neural Networks}
@@ -277,7 +283,7 @@ The perceptron can be seen as an \defc{artificial neuron}. It takes multiple inp
         \begin{itemize}
             \item It adds non-linearity to a neural network
             \item Without it we would have a linear regression model
-            \item Allows for backpropagation
+            \item Differentiable activation functions are needed for backpropagation, see later in this section.
         \end{itemize}
     \end{minipage}
     \begin{minipage}
@@ -285,6 +291,31 @@ The perceptron can be seen as an \defc{artificial neuron}. It takes multiple inp
         \centering
         \includegraphics[width=0.8\textwidth]{Pics/11/Linear_NonLinear.png}
     \end{minipage}
+\end{defbox}
+
+\begin{defbox}
+    [Activation Function Derivatives]
+    The derivative of an activation function is needed for backpropogation, see later in this section. The common ones are:
+
+    \begin{center}
+        \begin{tabular}{|p{0.18\textwidth}|p{0.36\textwidth}|p{0.36\textwidth}|}
+            \hline
+            \textbf{Name} & \textbf{Function} & \textbf{Derivative} \\
+            \hline\hline
+            Sigmoid & $g(x) = \frac{1}{1 + e^{-x}}$ & $g\prime(x) = g(x)(1 - g(x))$ \\
+            \hline
+            Tanh & $g(x) = \tanh(x)$ & $g\prime(x) = 1 - g^2(x)$ \\
+            \hline
+            ReLU & $g(x) = \max(0,x)$ & $g\prime(x) = \begin{cases} 1 & x > 0 \\ 0 & x \leq 0 \end{cases}$ \\
+            \hline
+            Leaky ReLU & $g(x) = \begin{cases} x & x > 0 \\ 0.01x & x \leq 0 \end{cases}$ & $g\prime(x) = \begin{cases} 1 & x > 0 \\ 0.01 & x \leq 0 \end{cases}$ \\
+            \hline
+            Maxout & $g(x) = \max(x_1, x_2, \ldots, x_n)$ & $g\prime(x) = \begin{cases} 1 & x_1 = \max(x_1, x_2, \ldots, x_n) \\ 0 & \text{otherwise} \end{cases}$ \\
+            \hline
+            ELU & $g(x) = \begin{cases} x & x > 0 \\ \alpha(e^x - 1) & x \leq 0 \end{cases}$ & $g\prime(x) = \begin{cases} 1 & x > 0 \\ \alpha e^x & x \leq 0 \end{cases}$ \\
+            \hline
+        \end{tabular}
+    \end{center}
 \end{defbox}
 
 \subsubsection{Perceptron to Neural Network}
@@ -336,7 +367,9 @@ This yields a NN model:
     \includegraphics[width=0.5\textwidth]{Pics/11/PredictionNN.png}
 \end{figure}
 
-From this we can calculate $z$:
+From this we can calculate the outputs of each neuron by applying the neurons activation function to the weighted sum of the inputs, and propagating the result to the next layer. This is called \defc{forward propagation}.
+
+For the first layer (z) we have:
 
 \begin{csmb*}
     $\begin{array}{l}
@@ -404,34 +437,31 @@ Algorithm:
     \item Initialize weights randomly
     \item Loop until convergence
     \begin{itemize}
-        \item Compute gradient $\displaystyle \frac{\partial J(\theta)}{\partial \theta}$
-        \item Update weights $\theta \leftarrow \theta - \alpha \frac{\partial J(\theta)}{\partial \theta}$ (with $\alpha$ learning rate)
+        \item Compute gradient $\displaystyle \nabla J(\theta) = \frac{\partial J(\theta)}{\partial \theta}$
+        \item Update weights $\theta \leftarrow \theta - \alpha \nabla J(\theta)$ (with $\alpha$ learning rate)
     \end{itemize}
     \item Return weights
 \end{enumerate}
 
 \begin{defbox}
-    [How to compute $\displaystyle \frac{\partial J(\theta)}{\partial \theta}$]
-    Main Question: How much do the weights affect the outcome i.e. the final loss?
+    [Backpropagation: Computing $\displaystyle \nabla J(\theta) = \frac{\partial J(\theta)}{\partial \theta}$ ]
+    
+    Backpropagation is the algorithm used to compute the gradients for gradient descent. It works by applying the chain rule of calculus to compute the gradient of the loss function with respect to each weight in the network, starting from the output layer and moving backwards through the hidden layers to the input layer:
 
-    Using the chain rule we can describe the problem as:
-
-    \begin{minipage}
-        [t]{0.5\textwidth}
-        \centering
-        \begin{csmb*}
-            $\frac{\partial J(\theta)}{\partial w_2} = \frac{\partial J(\hat{y})} \cdot \frac{\partial \hat{y}}{\partial w_2}$
-        \end{csmb*}
-    \end{minipage}
-    \begin{minipage}
-        [t]{0.5\textwidth}
-        \centering
-        \begin{csmb*}
-            $\frac{\partial J(\theta)}{\partial w_1} = \frac{\partial J(\theta)}{\partial \hat{y}} \cdot \frac{\partial \hat{y}}{\partial z_1}\cdot \frac{\partial z_1}{\partial w_1}$
-        \end{csmb*}
-    \end{minipage}
-
-    We can repeat this for every weight in the network using the gradient from later layers: Propogate the error back to all nodes, through the network.
+    \begin{enumerate}
+        \item \textbf{Forward pass:} Compute the output of the network for a given input and calculate the loss.
+        \item \textbf{Backward pass:} Compute the gradient of the loss with respect to each weight by propagating the error backwards through the network:
+        \begin{itemize}
+            \item For the output layer, compute the gradient of the loss with respect to the output of the network and then with respect to the weights connecting the last hidden layer to the output layer:
+            \begin{csmb*}
+                $\displaystyle \frac{\partial J}{\partial w_L} = \frac{\partial J}{\partial \hat{y}} \cdot \frac{\partial \hat{y}}{\partial w_L}$\\
+            \end{csmb*}
+            \item For all other layers, compute the gradient of the loss with respect to the output of the layer and then with respect to the weights connecting the previous layer to the current layer:
+            \begin{csmb*}
+                $\displaystyle \frac{\partial J}{\partial w_k} = \frac{\partial J}{\partial \hat{y}} \frac{\partial \hat{y}}{\partial z_k} \frac{\partial z_k}{\partial w_k} = \frac{\partial J}{\partial z_k} \cdot \frac{\partial z_k}{\partial w_k}$ = Error at current neuron $\cdot$ Error of previous layer\\
+            \end{csmb*}
+        \end{itemize}
+    \end{enumerate}
 
     \begin{center}
         \includegraphics[width=0.7\textwidth]{Pics/11/Backpropagation.png}
@@ -445,7 +475,7 @@ Algorithm:
     \includegraphics[width=0.6\textwidth]{Pics/11/BackpropagationExample.png}
 \end{figure}
 
-Given $g = ReLU(x) = \max(0,x),x_1 = 4,y = 1, \hat{y} = 2, \mathcal{L} = (\hat{y} - y)^2, J(\theta) = \mathcal{L}$
+Given $g = ReLU(x) = \max(0,x), g\prime (x) = \begin{cases} 1 & x > 0 \\ 0 & x \leq 0 \end{cases}, x_1 = 4,y = 1, \hat{y} = 2, \mathcal{L} = (\hat{y} - y)^2, J(\theta) = \mathcal{L}$
 
 \begin{defbox}
     [ReLU: Rectified Linear Unit]
