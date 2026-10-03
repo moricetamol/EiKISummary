@@ -33,7 +33,7 @@ Inductive learning is the simplest form of learning. It deduces a trend from exa
     \item Use examples to find a hypothesis $h$ such that $h \approx f$
 \end{itemize}
 
-Hypothesis $h$ is \defc{consistent} if \inlmathbox{$\forall (x_i, y_i) \in D: h(x_i) = y_i$}.
+Hypothesis $h$ is \defc{consistent} if \inlmathbox{$\forall (x_i, y_i) \in D: h(x_i) = y_i \quad \text{i.e.} h(x_i) = f(x_i)$ }.
 
 \begin{minipage}
     [t]{0.5\textwidth}
@@ -244,7 +244,6 @@ To avoid overfitting we can use the following methods:
 
 These will not be dicussed in detail here, check out other advanced machine learning courses for more information. (DMML, DLAM, etc.)
 
-\newpage
 \subsection{Neural Networks}
 \subsubsection{Deep Learning}
 Up until now we always had to supervise learning in some way, like feature extraction. 
@@ -257,12 +256,12 @@ The perceptron can be seen as an \defc{artificial neuron}. It takes multiple inp
 \begin{figure}
     [H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Pics/11/Perceptron.png}
+    \includegraphics[width=0.8\textwidth]{Pics/11/Perceptron.png}
 \end{figure}
 
 \begin{itemize}
     \item Neurons correspond to nodes or units
-    \item A link from unit j to uni i propagates activation y from j to i
+    \item A link from unit j to unit i propagates activation y from j to i
     \item The weight $w_{i,j}$ of the link determines the strength and sign of the connection
     \item All weights together are called W or $\theta$ and describe the model
     \item The \defc{total input activation} is the sum of the input activations
@@ -289,13 +288,13 @@ The perceptron can be seen as an \defc{artificial neuron}. It takes multiple inp
     \begin{minipage}
         [c]{0.5\textwidth}
         \centering
-        \includegraphics[width=0.8\textwidth]{Pics/11/Linear_NonLinear.png}
+        \includegraphics[width=0.7\textwidth]{Pics/11/Linear_NonLinear.png}
     \end{minipage}
 \end{defbox}
 
 \begin{defbox}
     [Activation Function Derivatives]
-    The derivative of an activation function is needed for backpropogation, see later in this section. The common ones are:
+    The derivative of an activation function is needed for backpropogation, see later in this section. Common ones:
 
     \begin{center}
         \begin{tabular}{|p{0.18\textwidth}|p{0.36\textwidth}|p{0.36\textwidth}|}
@@ -318,6 +317,7 @@ The perceptron can be seen as an \defc{artificial neuron}. It takes multiple inp
     \end{center}
 \end{defbox}
 
+\newpage
 \subsubsection{Perceptron to Neural Network}
 \begin{minipage}
     [t]{0.4\textwidth}
